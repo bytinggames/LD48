@@ -12,14 +12,14 @@ namespace LD48
         SpriteBatch spriteBatch;
         GraphicsDevice gDevice;
 
-        ScreenEnumerator screen;
+        UpdrawEnumerator screen;
 
         public Ingame(SpriteBatch spriteBatch, GraphicsDevice gDevice)
         {
             this.spriteBatch = spriteBatch;
             this.gDevice = gDevice;
 
-            screen = new ScreenEnumerator(WholeGame());
+            screen = new UpdrawEnumerator(WholeGame());
         }
         public bool Update(GameTime gameTime)
         {
@@ -55,7 +55,7 @@ namespace LD48
             screen.Current?.Dispose();
         }
 
-        public IEnumerable<GameScreen> WholeGame()
+        public IEnumerable<Updraw> WholeGame()
         {
             //int w = 100;
             //int h = 100;d
@@ -66,11 +66,26 @@ namespace LD48
             //};
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
-
             int level = 1;
-            yield return TrackFile.LoadTrack(level++);
-            yield return TrackFile.LoadTrack(level++);
-            yield return TrackFile.LoadTrack(level++);
+            yield return new DialogueIntro();
+            foreach (var item in Level(level++)) yield return item;
+            yield return new DialogueIntro();
+            foreach (var item in Level(level++)) yield return item;
+            yield return new DialogueIntro();
+            foreach (var item in Level(level++)) yield return item;
+            yield return new DialogueIntro();
+        }
+
+        IEnumerable<Updraw> Level(int level)
+        {
+            Race race;
+            while (true)
+            {
+                yield return race = TrackFile.LoadTrack(level);
+                if (race.won.Value)
+                    break;
+                yield return new DialogueLost();
+            }
         }
     }
 }

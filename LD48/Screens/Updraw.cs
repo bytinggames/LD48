@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LD48
 {
-    abstract class GameScreen : IDisposable
+    abstract class Updraw : IDisposable
     {
         public abstract void Draw(GameTime gameTime);
 

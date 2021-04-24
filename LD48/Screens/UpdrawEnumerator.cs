@@ -6,12 +6,12 @@ using System.Text;
 
 namespace LD48
 {
-    class ScreenEnumerator
+    class UpdrawEnumerator
     {
-        IEnumerator<GameScreen> enumerator;
-        public GameScreen Current { get; set; }
+        IEnumerator<Updraw> enumerator;
+        public Updraw Current { get; set; }
 
-        public ScreenEnumerator(IEnumerable<GameScreen> enumerable)
+        public UpdrawEnumerator(IEnumerable<Updraw> enumerable)
         {
             enumerator = enumerable.GetEnumerator();
             enumerator.MoveNext();

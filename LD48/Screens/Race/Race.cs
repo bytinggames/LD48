@@ -11,7 +11,7 @@ using System.Text.Json;
 
 namespace LD48
 {
-    class Race : GameScreen, IStorable
+    class Race : Updraw, IStorable
     {
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public Camera camera;
@@ -24,7 +24,7 @@ namespace LD48
         Tile[,] tiles;
         bool[,] street;
 
-        bool won;
+        public bool? won;
 
         enum EditorTool
         {
@@ -52,6 +52,7 @@ namespace LD48
         {
             this.Entities = entities;
             this.street = street;
+
             width = street.GetLength(0);
             height = street.GetLength(1);
 
@@ -277,7 +278,7 @@ namespace LD48
 
             camera.UpdateEnd(G.ResX, G.ResY);
 
-            if (won)
+            if (won.HasValue)
                 return false;
 
             return true;
@@ -394,6 +395,8 @@ namespace LD48
         {
             G.GDevice.Clear(Color.CornflowerBlue);
 
+            Drawer.roundPositionTo = 0f;// 0.25f;
+
             //DepthStencilState state = new DepthStencilState()
             //{
             //    DepthBufferEnable = true,
@@ -509,6 +512,11 @@ namespace LD48
         internal void Win()
         {
             won = true;
+        }
+
+        internal void Loose()
+        {
+            won = false;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace LD48
             float bestIndex = 0;
             Vector2 bestT = Vector2.Zero;
 
-            for (int i = Math.Max(0, currentIndex - 1); i < Math.Min(nodes.Count - 1, currentIndex + 1); i++)
+            for (int i = Math.Max(0, currentIndex - 1); i < nodes.Count - 1; i++)
             {
                 Vector2 a = nodes[i];
                 Vector2 b = nodes[i + 1];
