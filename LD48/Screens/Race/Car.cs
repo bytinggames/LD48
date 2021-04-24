@@ -20,15 +20,12 @@ namespace LD48
 
         M_Polygon poly;
 
-        int index;
+        public override object[] GetConstructorValues() => new object[]{ Pos, orientation };
 
-        public override object[] GetConstructorValues() => new object[]{ Pos, orientation, index };
-
-        public Car(Vector2 pos, float orientation, int index) : base(Textures.car, new M_Rectangle(0,0, Textures.car.Width, Textures.car.Height).ToPolygon())
+        public Car(Vector2 pos, float orientation) : base(Textures.car, new M_Rectangle(0,0, Textures.car.Width, Textures.car.Height).ToPolygon())
         {
             Pos = pos;
             this.orientation = orientation;
-            this.index = index;
             poly = Mask as M_Polygon;
             for (int i = 0; i < poly.vertices.Count; i++)
             {
@@ -82,9 +79,9 @@ namespace LD48
             Move(velocity + pushBack);
             velocity = Pos - posPast - pushBack;
 
-            Vector2 lonDir = new Vector2((float)Math.Cos(orientation), (float)Math.Sin(orientation));
+            Vector2 lonDir = GetLonDir();
             float lon = Vector2.Dot(lonDir, velocity);
-            Vector2 latDir = new Vector2(lonDir.Y, -lonDir.X);
+            Vector2 latDir = GetLatDir();
             float lat = Vector2.Dot(latDir, velocity);
             if (Math.Abs(lat) < 1f)
                 lat = 0f;
@@ -117,6 +114,9 @@ namespace LD48
             }
 
         }
+
+        public Vector2 GetLonDir() => new Vector2((float)Math.Cos(orientation), (float)Math.Sin(orientation));
+        public Vector2 GetLatDir() => new Vector2((float)Math.Sin(orientation), (float)-Math.Cos(orientation));
 
         public override void Draw(GameTime gameTime)
         {

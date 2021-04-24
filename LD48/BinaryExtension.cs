@@ -19,6 +19,11 @@ namespace LD48
             { 3, typeof(Race) },
             { 4, typeof(EMS_Polygon) },
             { 5, typeof(House) },
+            { 6, typeof(Bot) },
+            { 7, typeof(Rival) },
+            { 8, typeof(PathTrack) },
+            { 9, typeof(Goal) },
+            { 10, typeof(PlayerCar) },
         };
         static Dictionary<Type, uint> ids = types.ToDictionary(i => i.Value, i => i.Key);
 

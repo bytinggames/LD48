@@ -10,6 +10,7 @@ namespace LD48
         [Order] public static DepthLayer zero;
         [Order] public static DepthLayer floor;
         [Order] public static DepthLayer floorOver;
+        [Order] public static DepthLayer goal;
         [Order] public static DepthLayer entities;
         [Order] public static DepthLayer maskDebug;
         [Order] public static DepthLayer house;
