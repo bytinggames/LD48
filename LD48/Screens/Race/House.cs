@@ -56,7 +56,7 @@ namespace LD48
                 return;
 
             rendered = true;
-            DrawOverlay(gameTime);
+            DrawMyOverlay(gameTime);
 
 
             for (int i = 0; i < above.Count; i++)
@@ -65,7 +65,7 @@ namespace LD48
                     above[i].DrawOverlayRecursive(gameTime);
             }
         }
-        public override void DrawOverlay(GameTime gameTime)
+        private void DrawMyOverlay(GameTime gameTime)
         {
             AnyCastedPoly((poly, i) =>
             {

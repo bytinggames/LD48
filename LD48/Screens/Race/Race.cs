@@ -26,17 +26,20 @@ namespace LD48
 
         enum EditorTool
         {
+            None,
             Tile,
-            House
+            House,
+            Car
         }
         EditorTool editorTool;
 
         List<House> houses = new List<House>();
 
-        public object[] GetConstructorValues() => new object[] { Entities, street };
-
         int pressedX, pressedY;
         KeyP mouseDown;
+        int carIndex;
+
+        public object[] GetConstructorValues() => new object[] { Entities, street };
 
         public Race(List<Entity> entities, bool[,] street)
         {
@@ -48,10 +51,10 @@ namespace LD48
             tiles = new Tile[width, height];
 
             player = entities.Find(f => f is Player) as Player;
-            
+
             for (int i = 0; i < entities.Count; i++)
             {
-                OnAddEntity(entities[i]);
+                OnAfterAddEntity(entities[i]);
             }
 
             if (instance != null)
@@ -61,7 +64,7 @@ namespace LD48
             camera = new Camera()
             {
                 moveSpeed = 0.1f,
-                zoomControl = false,
+                zoomControl = true,
             };
             camera.zoom = camera.targetZoom = 4f;
             camera.targetPos = player.Pos;
@@ -81,7 +84,12 @@ namespace LD48
             UpdateTiles(0, width, 0, height);
         }
 
-        private void OnAddEntity(Entity entity)
+        private void AddEntity(Entity entity)
+        {
+            Entities.Add(entity);
+            OnAfterAddEntity(entity);
+        }
+        private void OnAfterAddEntity(Entity entity)
         {
             if (entity is House h)
             {
@@ -102,116 +110,112 @@ namespace LD48
 
             #region Editor
 
-
-            if (Input.leftControl.down)
+            if (Input.e.pressed)
             {
-                camera.zoomControl = true;
-                //if (Input.mbWheel != 0)
-                //{
-                //    if (Input.mbWheel > 0)
-                //    {
-                //        camera.targetZoom /= 2f;
-                //    }
-                //    else
-                //    {
-                //        camera.targetZoom *= 2f;
-                //    }
-                //}
+                editorTool++;
+                if ((int)editorTool >= Enum.GetNames(editorTool.GetType()).Length)
+                    editorTool = 0;
             }
-            else
+            else if (Input.q.pressed)
             {
-                camera.zoomControl = false;
+                editorTool--;
+                if ((int)editorTool < 0)
+                    editorTool = (EditorTool)(Enum.GetNames(editorTool.GetType()).Length - 1);
+            }
 
-                if (Input.mbWheel != 0)
+            if (editorTool != EditorTool.None)
+            {
+                if (Input.mbLeft.pressed || Input.mbRight.pressed)
                 {
-                    if (Input.mbWheel > 0)
-                    {
-                        editorTool++;
-                        if ((int)editorTool >= Enum.GetNames(editorTool.GetType()).Length)
-                            editorTool = 0;
-                    }
-                    else
-                    {
-                        editorTool--;
-                        if ((int)editorTool < 0)
-                            editorTool = (EditorTool)(Enum.GetNames(editorTool.GetType()).Length - 1);
-                    }
+                    pressedX = (int)Math.Floor(camera.mousePos.X / Tile.size);
+                    pressedY = (int)Math.Floor(camera.mousePos.Y / Tile.size);
+                    mouseDown = Input.mbLeft.pressed ? Input.mbLeft : Input.mbRight;
                 }
-            }
-
-            if (Input.mbLeft.pressed || Input.mbRight.pressed)
-            {
-                pressedX = (int)Math.Floor(camera.mousePos.X / Tile.size);
-                pressedY = (int)Math.Floor(camera.mousePos.Y / Tile.size);
-                mouseDown = Input.mbLeft.pressed ? Input.mbLeft : Input.mbRight;
-            }
-            if (mouseDown != null && mouseDown.released)
-            {
-                switch (editorTool)
+                if (mouseDown != null && mouseDown.released)
                 {
-                    #region Tile
-                    case EditorTool.Tile:
+                    switch (editorTool)
+                    {
+                        #region Tile
+                        case EditorTool.Tile:
 
-                        int x = (int)Math.Floor(camera.mousePos.X / Tile.size);
-                        int y = (int)Math.Floor(camera.mousePos.Y / Tile.size);
+                            int x = (int)Math.Floor(camera.mousePos.X / Tile.size);
+                            int y = (int)Math.Floor(camera.mousePos.Y / Tile.size);
 
-                        int xStart = Math.Min(x, pressedX);
-                        int xEnd = Math.Max(x, pressedX);
-                        int yStart = Math.Min(y, pressedY);
-                        int yEnd = Math.Max(y, pressedY);
+                            int xStart = Math.Min(x, pressedX);
+                            int xEnd = Math.Max(x, pressedX);
+                            int yStart = Math.Min(y, pressedY);
+                            int yEnd = Math.Max(y, pressedY);
 
-                        bool setStreet = mouseDown == Input.mbLeft;
+                            bool setStreet = mouseDown == Input.mbLeft;
 
-                        if (xStart < 0)
-                            xStart = 0;
-                        if (yStart < 0)
-                            yStart = 0;
-                        if (xStart >= width)
-                            xStart = width - 1;
-                        if (yStart >= height)
-                            yStart = height - 1;
+                            if (xStart < 0)
+                                xStart = 0;
+                            if (yStart < 0)
+                                yStart = 0;
+                            if (xStart >= width)
+                                xStart = width - 1;
+                            if (yStart >= height)
+                                yStart = height - 1;
 
-                        for (int y1 = yStart; y1 <= yEnd; y1++)
-                            for (int x1 = xStart; x1 <= xEnd; x1++)
+                            for (int y1 = yStart; y1 <= yEnd; y1++)
+                                for (int x1 = xStart; x1 <= xEnd; x1++)
+                                {
+                                    street[x1, y1] = setStreet;
+                                }
+                            UpdateTiles(xStart - 1, xEnd + 1, yStart - 1, yEnd + 1);
+                            break;
+                        #endregion
+                        case EditorTool.House:
+                            if (mouseDown == Input.mbLeft)
                             {
-                                street[x1, y1] = setStreet;
+                                House house = new House(GetDragRectangle());
+                                AddEntity(house);
                             }
-                        UpdateTiles(xStart - 1, xEnd + 1, yStart - 1, yEnd + 1);
-                        break;
-                    #endregion
-                    case EditorTool.House:
-                        if (mouseDown == Input.mbLeft)
-                        {
-                            House house = new House(GetDragRectangle());
-                            Entities.Add(house);
-                            OnAddEntity(house);
-                        }
-                        break;
+                            break;
+                    }
+
+                    mouseDown = null;
                 }
 
-                mouseDown = null;
-            }
+                if (mouseDown == Input.mbRight)
+                {
+                    if (editorTool == EditorTool.House || editorTool == EditorTool.Car)
 
-            switch (editorTool)
-            {
-                case EditorTool.Tile:
-                    break;
-                case EditorTool.House:
-                    if (mouseDown == Input.mbRight)
-                    {
                         for (int i = Entities.Count - 1; i >= 0; i--)
                         {
-                            if (Entities[i] is House h)
                             if (Entities[i] is E_Mask m && m.Mask.ColVector(camera.mousePos))
                             {
+                                if (Entities[i] is House h)
+                                    houses.Remove(h);
                                 Entities.RemoveAt(i);
-                                houses.Remove(h);
                             }
                         }
-                    }
-                    break;
-            }
+                }
+                else
+                {
+                    switch (editorTool)
+                    {
+                        case EditorTool.Tile:
+                            break;
+                        case EditorTool.House:
+                            break;
+                        case EditorTool.Car:
 
+                            if (Input.mbLeft.pressed)
+                            {
+                                AddEntity(new Car(camera.mousePos, 0f, carIndex));
+                            }
+                            break;
+                    }
+                }
+
+                if (Input.plusNum.pressed)
+                    carIndex++;
+                else if (Input.minusNum.pressed)
+                    carIndex--;
+
+
+            }
             #endregion
 
 
@@ -416,9 +420,14 @@ namespace LD48
                 }
             }
 
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                Entities[i].DrawOverlay(gameTime);
+            }
+
             G.SpriteBatch.Begin();
 
-            Fonts.big.Draw("Editor Tool: " + editorTool, Vector2.One * 16f, Color.Black);
+            Fonts.big.Draw("Editor Tool: " + editorTool + "\ncarIndex: " + carIndex, Vector2.One * 16f, Color.Black);
 
             G.SpriteBatch.End();
         }

@@ -20,12 +20,15 @@ namespace LD48
 
         M_Polygon poly;
 
-        public override object[] GetConstructorValues() => new object[]{ Pos, orientation };
+        int index;
 
-        public Car(Vector2 pos, float orientation) : base(Textures.car, new M_Rectangle(0,0, Textures.car.Width, Textures.car.Height).ToPolygon())
+        public override object[] GetConstructorValues() => new object[]{ Pos, orientation, index };
+
+        public Car(Vector2 pos, float orientation, int index) : base(Textures.car, new M_Rectangle(0,0, Textures.car.Width, Textures.car.Height).ToPolygon())
         {
             Pos = pos;
             this.orientation = orientation;
+            this.index = index;
             poly = Mask as M_Polygon;
             for (int i = 0; i < poly.vertices.Count; i++)
             {
