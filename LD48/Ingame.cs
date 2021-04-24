@@ -67,7 +67,7 @@ namespace LD48
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
             int level = 1;
-            yield return new DialogueIntro();
+            //yield return new DialogueIntro();
             foreach (var item in Level(level++)) yield return item;
             yield return new DialogueIntro();
             foreach (var item in Level(level++)) yield return item;

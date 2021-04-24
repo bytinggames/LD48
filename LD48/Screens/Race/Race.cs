@@ -26,6 +26,8 @@ namespace LD48
 
         public bool? won;
 
+        bool pauseGame = true;
+
         enum EditorTool
         {
             None,
@@ -45,6 +47,8 @@ namespace LD48
 
         public List<Goal> goals = new List<Goal>();
         public List<EM_Solid> solids = new List<EM_Solid>();
+
+        Car carBuild;
 
         public object[] GetConstructorValues() => new object[] { Entities, street };
 
@@ -100,6 +104,11 @@ namespace LD48
             Entities.Add(entity);
             OnAfterAddEntity(entity);
         }
+        private void RemoveEntity(Entity entity)
+        {
+            OnBeforeRemoveEntity(entity);
+            Entities.Remove(entity);
+        }
         private void OnAfterAddEntity(Entity entity)
         {
             if (entity is EM_Solid s)
@@ -110,15 +119,30 @@ namespace LD48
             else if (entity is Goal g)
                 goals.Add(g);
         }
+        private void OnBeforeRemoveEntity(Entity entity)
+        {
+            if (entity is EM_Solid s)
+                solids.Remove(s);
+
+            if (entity is House h)
+                houses.Remove(h);
+            else if (entity is Goal g)
+                goals.Remove(g);
+        }
 
         public override bool Update(GameTime gameTime)
         {
             camera.UpdateBegin();
 
-            for (int i = 0; i < Entities.Count; i++)
+            if (!pauseGame)
             {
-                Entities[i].Update(gameTime);
+                for (int i = 0; i < Entities.Count; i++)
+                {
+                    Entities[i].Update(gameTime);
+                }
             }
+            else
+                player.Update(gameTime);
 
 
 
@@ -211,9 +235,7 @@ namespace LD48
                         {
                             if (Entities[i] is E_Mask m && m.Mask.ColVector(camera.mousePos))
                             {
-                                if (Entities[i] is House h)
-                                    houses.Remove(h);
-                                Entities.RemoveAt(i);
+                                RemoveEntity(Entities[i]);
                             }
                         }
                 }
@@ -229,12 +251,17 @@ namespace LD48
 
                             if (Input.mbLeft.pressed)
                             {
-                                Car car;
                                 if (carIndex == 0)
-                                    car = new PlayerCar(camera.mousePos, 0f);
+                                    carBuild = new PlayerCar(camera.mousePos, 0f);
                                 else
-                                    car = new Car(camera.mousePos, 0f);
-                                AddEntity(car);
+                                    carBuild = new Car(camera.mousePos, 0f);
+                                AddEntity(carBuild);
+                            }
+
+                            if (Input.mbLeft.down)
+                            {
+                                Vector2 dir = camera.mousePos - carBuild.Pos;
+                                carBuild.orientation = (float)Math.Atan2(dir.Y, dir.X);
                             }
                             break;
                         case EditorTool.Bot:
@@ -443,13 +470,16 @@ namespace LD48
             //    }
             //});
 
-            Depth.editorTools.Set(() =>
+            if (editorTool == EditorTool.Goal || editorTool == EditorTool.House || editorTool == EditorTool.Tile)
             {
-                if (mouseDown != null)
+                Depth.editorTools.Set(() =>
                 {
-                    GetDragRectangle().Draw(Color.Black * 0.5f);
-                }
-            });
+                    if (mouseDown != null)
+                    {
+                        GetDragRectangle().Draw(Color.Black * 0.5f);
+                    }
+                });
+            }
 
             G.SpriteBatch.End();
 
