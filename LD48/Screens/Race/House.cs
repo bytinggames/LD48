@@ -8,7 +8,7 @@ namespace LD48
 {
     class House : EM_Solid
     {
-        public override object[] GetConstructorValues() => new object[] { };
+        public override object[] GetConstructorValues() => new object[] { Mask };
 
         M_Polygon drawPolygon;
 

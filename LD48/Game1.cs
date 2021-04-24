@@ -86,10 +86,16 @@ namespace LD48
 
             windowHelper.UpdateBasicInputFunctions();
 
-            if (!ingame.Update(gameTime))
+            int iterations = 1;
+            if (Input.leftShift.down)
+                iterations = 10;
+            for (int i = 0; i < iterations; i++)
             {
-                Exit();
-                return;
+                if (!ingame.Update(gameTime))
+                {
+                    Exit();
+                    return;
+                }
             }
 
             base.Update(gameTime);

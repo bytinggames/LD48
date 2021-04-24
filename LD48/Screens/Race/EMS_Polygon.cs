@@ -18,6 +18,9 @@ namespace LD48
 
         public override void Draw(GameTime gameTime)
         {
+        }
+        public override void DrawOverlay(GameTime gameTime)
+        {
             Mask.Draw(G.SpriteBatch, Color.Black * 0.5f, Drawer.depth);
         }
     }

@@ -9,7 +9,7 @@ namespace LD48
     class Tile
     {
         public int indexX, indexY;
-        const int size = 16;
+        public const int size = 16;
 
         public void Draw(Vector2 pos)
         {

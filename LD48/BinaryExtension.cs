@@ -18,6 +18,7 @@ namespace LD48
             { 2, typeof(Player) },
             { 3, typeof(Race) },
             { 4, typeof(EMS_Polygon) },
+            { 5, typeof(House) },
         };
         static Dictionary<Type, uint> ids = types.ToDictionary(i => i.Value, i => i.Key);
 
@@ -27,6 +28,8 @@ namespace LD48
             { typeof(float), br => br.ReadSingle() },
             { typeof(Vector2), br => br.ReadVector2() },
             { typeof(string), br => br.ReadString() },
+            { typeof(bool), br => br.ReadBoolean() },
+            { typeof(M_Rectangle), br => br.ReadRectangle() },
         };
         static Dictionary<Type, Action<BinaryWriter, object>> switchWrite = new Dictionary<Type, Action<BinaryWriter, object>>()
         {
@@ -34,6 +37,8 @@ namespace LD48
             { typeof(float), (bw, v) => bw.Write((float)v) },
             { typeof(Vector2), (bw, v) => bw.Write((Vector2)v) },
             { typeof(string), (bw, v) => bw.Write((string)v) },
+            { typeof(bool), (bw, v) => bw.Write((bool)v) },
+            { typeof(M_Rectangle), (bw, v) => bw.Write((M_Rectangle)v) },
         };
 
         public static T Read<T>(this BinaryReader br) => (T)br.ReadFromType(typeof(T));
@@ -70,6 +75,40 @@ namespace LD48
             {
                 return br.ReadStorable();
             }
+            else if (type.IsArray)
+            {
+                int dimensions = br.ReadInt32();
+                int[] lengths = new int[dimensions];
+                for (int i = 0; i < dimensions; i++)
+                {
+                    lengths[i] = br.ReadInt32();
+                }
+                Type itemType = type.GetElementType();
+
+                Array array = Array.CreateInstance(itemType, lengths);
+
+                int[] indices = new int[dimensions];
+                while (true)
+                {
+                    array.SetValue(br.ReadFromType(itemType), indices);
+
+                    indices[0]++;
+
+                    int i = 0;
+                    while (indices[i] == lengths[i])
+                    {
+                        indices[i] = 0;
+                        i++;
+                        if (i == dimensions)
+                            break;
+                        indices[i]++;
+                    }
+                    if (i == dimensions)
+                        break;
+                }
+
+                return array;
+            }
             else
                 return switchRead[type](br);
         }
@@ -88,6 +127,37 @@ namespace LD48
             else if (value is IStorable s)
             {
                 bw.Write(s);
+            }
+            else if (t.IsArray)
+            {
+                int dimensions = t.GetArrayRank();
+                bw.Write(dimensions);
+                int[] lengths = new int[dimensions];
+                for (int i = 0; i < dimensions; i++)
+                {
+                    lengths[i] = ((Array)value).GetLength(i);
+                    bw.Write(lengths[i]);
+                }
+
+                int[] indices = new int[dimensions];
+                while (true)
+                {
+                    bw.WriteObject(((Array)value).GetValue(indices));
+
+                    indices[0]++;
+
+                    int i = 0;
+                    while (indices[i] == lengths[i])
+                    {
+                        indices[i] = 0;
+                        i++;
+                        if (i == dimensions)
+                            break;
+                        indices[i]++;
+                    }
+                    if (i == dimensions)
+                        break;
+                }
             }
             else
                 switchWrite[t](bw, value);

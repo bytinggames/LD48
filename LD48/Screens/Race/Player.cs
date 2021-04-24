@@ -136,11 +136,13 @@ namespace LD48
         public override void Draw(GameTime gameTime)
         {
             DrawMask();
-
-            if (Input.mbLeft.down)
-                kickMask.Draw(G.SpriteBatch, Color.Black * 0.5f, Drawer.depth);
-
             base.Draw(gameTime);
+        }
+
+        public override void DrawOverlay(GameTime gameTime)
+        {
+            if (Input.mbLeft.down)
+                kickMask.Draw(G.SpriteBatch, Color.Black * 0.5f);
         }
     }
 

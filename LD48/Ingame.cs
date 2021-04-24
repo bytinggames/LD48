@@ -58,20 +58,14 @@ namespace LD48
             {
                 new Player(Vector2.Zero)
             };
-
-            for (int i = 0; i < 10; i++)
-            {
-                entities.Add(new EMS_Polygon((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 300f));
-            }
-
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 2; i++)
             {
                 entities.Add(new Car((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f, G.Rand.NextFloat() * 6f));
             }
 
             entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
-            yield return new Race(entities);
+            yield return new Race(entities, new bool[100,100]);
         }
     }
 }
