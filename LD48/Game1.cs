@@ -3,6 +3,7 @@ using JuliHelperShared;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace LD48
 {
@@ -38,6 +39,9 @@ namespace LD48
             windowHelper = new WindowHelper(graphics, Window);
 
             G.Initialize(GraphicsDevice);
+
+            this.IsFixedTimeStep = true;
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
 
             base.Initialize();
         }
