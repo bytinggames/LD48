@@ -19,6 +19,8 @@ namespace LD48
         float orientation;
         Vector2 orientationDir;
 
+        const float moveSpeed = 2f;
+
         public override object[] GetConstructorValues() => new object[] { Pos };
 
         public Player(Vector2 pos) : base(Textures.player, new M_Circle(pos, radius))
@@ -74,7 +76,7 @@ namespace LD48
             if (move != Vector2.Zero)
             {
                 move.Normalize();
-                move *= 2f;
+                move *= moveSpeed;
             }
 
             #region Push out of half-solids
@@ -103,6 +105,8 @@ namespace LD48
 
             if (move != Vector2.Zero)
             {
+                if (move.Length() > moveSpeed)
+                    move = Vector2.Normalize(move) * moveSpeed;
                 Move(move);
             }
 

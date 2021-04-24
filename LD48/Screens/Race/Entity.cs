@@ -28,6 +28,10 @@ namespace LD48
             Texture.Draw(Pos);
         }
 
+        public virtual void DrawOverlay(GameTime gameTime)
+        {
+        }
+
         public virtual void Update(GameTime gameTime)
         {
 

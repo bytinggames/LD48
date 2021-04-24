@@ -34,7 +34,8 @@ namespace LD48
 
             camera = new Camera()
             {
-                moveSpeed = 0.1f
+                moveSpeed = 0.1f,
+                zoomControl = true,
             };
             camera.zoom = camera.targetZoom = 4f;
             camera.targetPos = player.Pos;
@@ -60,8 +61,17 @@ namespace LD48
         {
             G.GDevice.Clear(Color.CornflowerBlue);
 
-            G.SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, camera.matrix);
+            DepthStencilState state = new DepthStencilState()
+            {
+                DepthBufferEnable = true,
+                DepthBufferFunction = CompareFunction.LessEqual,
+            };
+
+            G.SpriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, state, null, null, camera.matrix);
             DrawM.basicEffect.World = camera.matrix;
+            G.GDevice.DepthStencilState = state;
+
+            //DrawM.basicEffect.Projection = Matrix.Create
             Depth.zero.Set(() =>
             {
                 for (int i = 0; i < Entities.Count; i++)
@@ -69,7 +79,14 @@ namespace LD48
                     Entities[i].Draw(gameTime);
                 }
             });
+
             G.SpriteBatch.End();
+
+
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                Entities[i].DrawOverlay(gameTime);
+            }
         }
 
         public override void Dispose()

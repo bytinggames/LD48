@@ -69,6 +69,8 @@ namespace LD48
                 entities.Add(new Car((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f, G.Rand.NextFloat() * 6f));
             }
 
+            entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
+
             yield return new Race(entities);
         }
     }

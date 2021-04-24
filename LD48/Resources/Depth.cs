@@ -9,6 +9,7 @@ namespace LD48
     {
         [Order] public static DepthLayer zero;
         [Order] public static DepthLayer maskDebug;
+        [Order] public static DepthLayer house;
         [Order] public static DepthLayer one;
     }
 }
