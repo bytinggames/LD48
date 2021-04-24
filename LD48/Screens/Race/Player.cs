@@ -19,6 +19,8 @@ namespace LD48
         float orientation;
         Vector2 orientationDir;
 
+        public override object[] GetConstructorValues() => new object[] { Pos };
+
         public Player(Vector2 pos) : base(Textures.player, new M_Circle(pos, radius))
         {
             Pos = pos;
@@ -79,7 +81,7 @@ namespace LD48
 
             Vector2 pushBack = Vector2.Zero;
 
-            foreach (var e in Race.instance.entities)
+            foreach (var e in Race.instance.Entities)
             {
                 switch (e)
                 {
@@ -110,7 +112,7 @@ namespace LD48
 
             if (Input.mbLeft.pressed)
             {
-                foreach (var e in Race.instance.entities)
+                foreach (var e in Race.instance.Entities)
                 {
                     switch (e)
                     {

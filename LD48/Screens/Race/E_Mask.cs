@@ -7,10 +7,10 @@ using System.Text;
 
 namespace LD48
 {
-    class E_Mask : Entity
+    abstract class E_Mask : Entity
     {
-        public Mask Mask { get; set; }
-        public Vector2 MaskOffset { get; set; }
+        public Mask Mask;
+        public Vector2 MaskOffset;
 
         public E_Mask(Texture2D tex, Mask mask) : base(tex)
         {
@@ -54,9 +54,9 @@ namespace LD48
                 Vector2 originalMove = move;
                 CollisionResult crTotal = default;
 
-                for (int i = 0; i < Race.instance.entities.Count; i++)
+                for (int i = 0; i < Race.instance.Entities.Count; i++)
                 {
-                    switch (Race.instance.entities[i])
+                    switch (Race.instance.Entities[i])
                     {
                         case EM_Solid obs:
                             CollisionResult cr = Mask.DistToMask(obs.Mask, move);

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace LD48
 {
     class Car : EM_HalfSolid
     {
-        float orientation;
+        public float orientation;
         public float orientationVelocity;
         public Vector2 velocity;
 
@@ -18,6 +19,8 @@ namespace LD48
         float maskOrientation;
 
         M_Polygon poly;
+
+        public override object[] GetConstructorValues() => new object[]{ Pos, orientation };
 
         public Car(Vector2 pos, float orientation) : base(Textures.car, new M_Rectangle(0,0, Textures.car.Width, Textures.car.Height).ToPolygon())
         {
@@ -53,7 +56,7 @@ namespace LD48
 
             Vector2 pushBack = Vector2.Zero;
 
-            foreach (var e in Race.instance.entities)
+            foreach (var e in Race.instance.Entities)
             {
                 if (e == this)
                     continue;
@@ -100,7 +103,7 @@ namespace LD48
             orientation += orientationVelocity;
             UpdateMask();
 
-            if (Race.instance.entities.Any(f => f is EM_Solid s && s.Mask.ColMask(Mask)))
+            if (Race.instance.Entities.Any(f => f is EM_Solid s && s.Mask.ColMask(Mask)))
             {
                 orientation -= orientationVelocity;
                 UpdateMask();

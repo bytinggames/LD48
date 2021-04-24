@@ -9,7 +9,7 @@ namespace LD48
     class ScreenEnumerator
     {
         IEnumerator<GameScreen> enumerator;
-        public GameScreen Current { get; private set; }
+        public GameScreen Current { get; set; }
 
         public ScreenEnumerator(IEnumerable<GameScreen> enumerable)
         {

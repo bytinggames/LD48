@@ -23,6 +23,19 @@ namespace LD48
         }
         public bool Update(GameTime gameTime)
         {
+            if (screen.Current is Race race)
+            {
+                if (Input.leftControl.down && Input.s.pressed)
+                {
+                    TrackFile.SaveTrack(race);
+                }
+                if (Input.leftControl.down && Input.o.pressed)
+                {
+                    race.Dispose();
+                    screen.Current = TrackFile.LoadTrack();
+                }
+            }
+
             if (!screen.Update(gameTime))
                 return false;
 
@@ -41,7 +54,22 @@ namespace LD48
 
         public IEnumerable<GameScreen> WholeGame()
         {
-            yield return new Race();
+            List<Entity> entities = new List<Entity>()
+            {
+                new Player(Vector2.Zero)
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                entities.Add(new EMS_Polygon((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 300f));
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                entities.Add(new Car((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f, G.Rand.NextFloat() * 6f));
+            }
+
+            yield return new Race(entities);
         }
     }
 }

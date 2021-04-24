@@ -4,58 +4,56 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace LD48
 {
-    class Race : GameScreen
+    class Race : GameScreen, IStorable
     {
-        public List<Entity> entities = new List<Entity>();
+        public List<Entity> Entities { get; set; } = new List<Entity>();
         public Camera camera;
         public Player player;
 
         public static Race instance;
 
-        public Race()
+
+        public object[] GetConstructorValues() => new object[] { Entities };
+
+        public Race(List<Entity> entities)
         {
+            this.Entities = entities;
+
+            player = entities.Find(f => f is Player) as Player;
+
             if (instance != null)
                 throw new Exception();
             instance = this;
 
-            entities = new List<Entity>()
-            {
-                (player = new Player(Vector2.Zero)),
-            };
-
-            for (int i = 0; i < 10; i++)
-            {
-                entities.Add(new EMS_Polygon((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 300f));
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                entities.Add(new Car((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f, G.Rand.NextFloat() * 6f));
-            }
-
             camera = new Camera()
             {
-                 moveSpeed = 0.1f
+                moveSpeed = 0.1f
             };
             camera.zoom = camera.targetZoom = 4f;
+            camera.targetPos = player.Pos;
+            camera.JumpToTarget();
         }
 
         public override bool Update(GameTime gameTime)
         {
             camera.UpdateBegin();
 
-            for (int i = 0; i < entities.Count; i++)
+            for (int i = 0; i < Entities.Count; i++)
             {
-                entities[i].Update(gameTime);
+                Entities[i].Update(gameTime);
             }
 
             camera.targetPos = player.Pos;
 
             camera.UpdateEnd(G.ResX, G.ResY);
+
             return true;
         }
         public override void Draw(GameTime gameTime)
@@ -66,9 +64,9 @@ namespace LD48
             DrawM.basicEffect.World = camera.matrix;
             Depth.zero.Set(() =>
             {
-                for (int i = 0; i < entities.Count; i++)
+                for (int i = 0; i < Entities.Count; i++)
                 {
-                    entities[i].Draw(gameTime);
+                    Entities[i].Draw(gameTime);
                 }
             });
             G.SpriteBatch.End();
@@ -77,6 +75,11 @@ namespace LD48
         public override void Dispose()
         {
             instance = null;
+        }
+
+        public void GetStorables()
+        {
+            //return 
         }
     }
 }
