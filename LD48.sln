@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LD48", "LD48\LD48.csproj", "{06A29B60-EDB1-4D88-81C9-FFBE1DF630EC}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "JuliHelperShared", "..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.shproj", "{7061EA84-D712-49CE-AEC3-C2CAAEB99B92}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems*{06a29b60-edb1-4d88-81c9-ffbe1df630ec}*SharedItemsImports = 5
+		..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems*{7061ea84-d712-49ce-aec3-c2caaeb99b92}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06A29B60-EDB1-4D88-81C9-FFBE1DF630EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A29B60-EDB1-4D88-81C9-FFBE1DF630EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A29B60-EDB1-4D88-81C9-FFBE1DF630EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A29B60-EDB1-4D88-81C9-FFBE1DF630EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E082F6FE-02B5-4192-8418-28CAF0A5234C}
+	EndGlobalSection
+EndGlobal
