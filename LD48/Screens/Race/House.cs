@@ -40,10 +40,13 @@ namespace LD48
         }
         public override void Draw(GameTime gameTime)
         {
-            Depth.houseShadow.Set(() =>
-            {
-                DrawM.Sprite.DrawRectangleOutlineOutsideGradient(G.SpriteBatch, baseRect, Color.Black * 0.5f, Color.Transparent, 16f * height * 0.5f, (float)Math.Round(16 * height * 0.125f), true, Drawer.depth);
-            });
+#if DEBUG
+            if (!Input.space.down)
+#endif
+                Depth.houseShadow.Set(() =>
+                {
+                    DrawM.Sprite.DrawRectangleOutlineOutsideGradient(G.SpriteBatch, baseRect, Color.Black * 0.5f, Color.Transparent, 16f * height * 0.5f, (float)Math.Max(1,Math.Ceiling(16 * height * 0.125f)), true, Drawer.depth);
+                });
             Depth.maskDebug.Set(() =>
             {
                 Mask.Draw(G.SpriteBatch, Color.Black * 0.5f, Drawer.depth);
@@ -56,6 +59,10 @@ namespace LD48
 
         public void DrawOverlayRecursive(GameTime gameTime)
         {
+#if DEBUG
+            if (Input.space.down)
+                return;
+#endif
             if (under.Any(f => !f.rendered))
                 return;
 

@@ -82,7 +82,7 @@ namespace LD48
                 Exit();
                 return;
             }
-            if (Input.r.pressed)
+            if (Input.leftControl.down && Input.r.pressed)
             {
                 ingame.Dispose();
                 NewIngame();

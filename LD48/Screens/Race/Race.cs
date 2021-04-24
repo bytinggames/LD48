@@ -26,7 +26,7 @@ namespace LD48
 
         public bool? won;
 
-        bool pauseGame = true;
+        bool pauseGame = false;
 
         enum EditorTool
         {
@@ -161,7 +161,7 @@ namespace LD48
                     editorTool = (EditorTool)(Enum.GetNames(editorTool.GetType()).Length - 1);
             }
 
-            if (editorTool != EditorTool.None)
+            //if (editorTool != EditorTool.None)
             {
                 if (Input.mbLeft.pressed || Input.mbRight.pressed)
                 {
@@ -229,7 +229,7 @@ namespace LD48
 
                 if (mouseDown == Input.mbRight)
                 {
-                    if (editorTool == EditorTool.House || editorTool == EditorTool.Car)
+                    if (editorTool != EditorTool.Tile)
 
                         for (int i = Entities.Count - 1; i >= 0; i--)
                         {
