@@ -49,7 +49,9 @@ namespace LD48
 
         public override void Update(GameTime gameTime)
         {
-            Pos += velocity;
+            Vector2 posPast = Pos;
+            Move(velocity);
+            velocity = Pos - posPast;
 
             Vector2 lonDir = new Vector2((float)Math.Cos(orientation), (float)Math.Sin(orientation));
             float lon = Vector2.Dot(lonDir, velocity);
@@ -73,8 +75,18 @@ namespace LD48
                 orientationVelocity *= 0.9f;
 
             orientation += orientationVelocity;
-
             UpdateMask();
+
+            if (Race.instance.entities.Any(f => f is EM_Solid s && s.Mask.ColMask(Mask)))
+            {
+                orientation -= orientationVelocity;
+                UpdateMask();
+
+                // MAYBE TODO: impulse calculation (but not really necessary)
+                // bounce in other direction
+                orientationVelocity = -orientationVelocity * 0.5f;
+            }
+
         }
 
         public override void Draw(GameTime gameTime)
