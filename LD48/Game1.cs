@@ -33,6 +33,7 @@ namespace LD48
             graphics.ApplyChanges();
 
             Input.Initialize();
+            DrawM.Initialize(GraphicsDevice);
 
             windowHelper = new WindowHelper(graphics, Window);
 
