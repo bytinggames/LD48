@@ -26,14 +26,17 @@ namespace LD48
 
         enum EditorTool
         {
-            Tile
+            Tile,
+            House
         }
         EditorTool editorTool;
+
+        List<House> houses = new List<House>();
 
         public object[] GetConstructorValues() => new object[] { Entities, street };
 
         int pressedX, pressedY;
-        KeyP pressed;
+        KeyP mouseDown;
 
         public Race(List<Entity> entities, bool[,] street)
         {
@@ -45,6 +48,11 @@ namespace LD48
             tiles = new Tile[width, height];
 
             player = entities.Find(f => f is Player) as Player;
+            
+            for (int i = 0; i < entities.Count; i++)
+            {
+                OnAddEntity(entities[i]);
+            }
 
             if (instance != null)
                 throw new Exception();
@@ -71,6 +79,14 @@ namespace LD48
                 }
             }
             UpdateTiles(0, width, 0, height);
+        }
+
+        private void OnAddEntity(Entity entity)
+        {
+            if (entity is House h)
+            {
+                houses.Add(h);
+            }
         }
 
         public override bool Update(GameTime gameTime)
@@ -123,18 +139,19 @@ namespace LD48
                 }
             }
 
-            switch (editorTool)
+            if (Input.mbLeft.pressed || Input.mbRight.pressed)
             {
-                case EditorTool.Tile:
+                pressedX = (int)Math.Floor(camera.mousePos.X / Tile.size);
+                pressedY = (int)Math.Floor(camera.mousePos.Y / Tile.size);
+                mouseDown = Input.mbLeft.pressed ? Input.mbLeft : Input.mbRight;
+            }
+            if (mouseDown != null && mouseDown.released)
+            {
+                switch (editorTool)
+                {
+                    #region Tile
+                    case EditorTool.Tile:
 
-                    if (Input.mbLeft.pressed || Input.mbRight.pressed)
-                    {
-                        pressedX = (int)Math.Floor(camera.mousePos.X / Tile.size);
-                        pressedY = (int)Math.Floor(camera.mousePos.Y / Tile.size);
-                        pressed = Input.mbLeft.pressed ? Input.mbLeft : Input.mbRight;
-                    }
-                    if (pressed != null && pressed.released)
-                    {
                         int x = (int)Math.Floor(camera.mousePos.X / Tile.size);
                         int y = (int)Math.Floor(camera.mousePos.Y / Tile.size);
 
@@ -143,7 +160,7 @@ namespace LD48
                         int yStart = Math.Min(y, pressedY);
                         int yEnd = Math.Max(y, pressedY);
 
-                        bool setStreet = pressed == Input.mbLeft;
+                        bool setStreet = mouseDown == Input.mbLeft;
 
                         if (xStart < 0)
                             xStart = 0;
@@ -160,11 +177,38 @@ namespace LD48
                                 street[x1, y1] = setStreet;
                             }
                         UpdateTiles(xStart - 1, xEnd + 1, yStart - 1, yEnd + 1);
+                        break;
+                    #endregion
+                    case EditorTool.House:
+                        if (mouseDown == Input.mbLeft)
+                        {
+                            House house = new House(GetDragRectangle());
+                            Entities.Add(house);
+                            OnAddEntity(house);
+                        }
+                        break;
+                }
 
-                        pressed = null;
-                    }
+                mouseDown = null;
+            }
+
+            switch (editorTool)
+            {
+                case EditorTool.Tile:
                     break;
-                default:
+                case EditorTool.House:
+                    if (mouseDown == Input.mbRight)
+                    {
+                        for (int i = Entities.Count - 1; i >= 0; i--)
+                        {
+                            if (Entities[i] is House h)
+                            if (Entities[i] is E_Mask m && m.Mask.ColVector(camera.mousePos))
+                            {
+                                Entities.RemoveAt(i);
+                                houses.Remove(h);
+                            }
+                        }
+                    }
                     break;
             }
 
@@ -337,20 +381,39 @@ namespace LD48
 
             Depth.editorTools.Set(() =>
             {
-            if (pressed != null)
-            {
-                    Vector2 start = new Vector2(pressedX + 0.5f, pressedY + 0.5f) * Tile.size;
-                    Vector2 end = ((camera.mousePos / Tile.size).FloorVector() + Vector2.One * 0.5f) * Tile.size;
-                    new M_Rectangle(start, end - start).Enlarge(Tile.size / 2f).Draw(Color.Black * 0.5f);
+                if (mouseDown != null)
+                {
+                    GetDragRectangle().Draw(Color.Black * 0.5f);
                 }
             });
 
             G.SpriteBatch.End();
 
+            List<House> ordered = new List<House>();
 
-            for (int i = 0; i < Entities.Count; i++)
+            for (int i = 0; i < houses.Count; i++)
             {
-                Entities[i].DrawOverlay(gameTime);
+                houses[i].PrepareExtrudedPolygons();
+
+                for (int j = 0; j < houses.Count; j++)
+                {
+                    if (j == i)
+                        continue;
+                    if (houses[i].AnyCastedPoly((poly, i) => houses[j].Mask.ColMask(poly)))
+                    {
+                        // collision
+                        houses[i].under.Add(houses[j]);
+                        houses[j].above.Add(houses[i]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < houses.Count; i++)
+            {
+                if (!houses[i].rendered && houses[i].under.Count == 0)
+                {
+                    houses[i].DrawOverlayRecursive(gameTime);
+                }
             }
 
             G.SpriteBatch.Begin();
@@ -358,6 +421,13 @@ namespace LD48
             Fonts.big.Draw("Editor Tool: " + editorTool, Vector2.One * 16f, Color.Black);
 
             G.SpriteBatch.End();
+        }
+
+        private M_Rectangle GetDragRectangle()
+        {
+            Vector2 start = new Vector2(pressedX + 0.5f, pressedY + 0.5f) * Tile.size;
+            Vector2 end = ((camera.mousePos / Tile.size).FloorVector() + Vector2.One * 0.5f) * Tile.size;
+            return new M_Rectangle(start, end - start).Enlarge(Tile.size / 2f);
         }
 
         public override void Dispose()
