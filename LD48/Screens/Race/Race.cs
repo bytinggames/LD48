@@ -12,7 +12,7 @@ namespace LD48
     {
         public List<Entity> entities = new List<Entity>();
         public Camera camera;
-        public EM_Player player;
+        public Player player;
 
         public static Race instance;
 
@@ -24,12 +24,17 @@ namespace LD48
 
             entities = new List<Entity>()
             {
-                (player = new EM_Player(Vector2.Zero)),
+                (player = new Player(Vector2.Zero)),
             };
 
             for (int i = 0; i < 10; i++)
             {
                 entities.Add(new EMS_Polygon((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f));
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                entities.Add(new Car(Vector2.Zero, G.Rand.NextFloat() * 6f));
             }
 
             camera = new Camera()

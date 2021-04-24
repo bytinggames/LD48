@@ -7,14 +7,14 @@ using System.Text;
 
 namespace LD48
 {
-    class EM_Player : E_Mask
+    class Player : E_Mask
     {
         KeyCollection right, up, left, down;
         List<KeyCollection> keys = new List<KeyCollection>();
 
         const float maskRadius = 8f;
 
-        public EM_Player(Vector2 pos) : base(Textures.player, new M_Circle(pos, maskRadius))
+        public Player(Vector2 pos) : base(Textures.player, new M_Circle(pos, maskRadius))
         {
             Pos = pos;
 
