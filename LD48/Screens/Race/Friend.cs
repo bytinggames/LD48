@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LD48
 {
-    class Rival : Bot
+    class Friend : Bot
     {
         float playerTexOrientation;
 
@@ -14,9 +14,20 @@ namespace LD48
 
         public override object[] GetConstructorValues() => new object[] { path };
 
-        public Rival(PathTrack path) : base(0, path)
+        public Friend(PathTrack path) : base(0, path)
         {
             playerTexOrientation = orientation;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            foreach (var goal in Race.instance.goals)
+            {
+                if (goal.Mask.ColMask(Mask))
+                    Race.instance.Loose();
+            }
         }
 
         public override void Draw(GameTime gameTime)

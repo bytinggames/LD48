@@ -20,7 +20,7 @@ namespace LD48
             { 4, typeof(EMS_Polygon) },
             { 5, typeof(House) },
             { 6, typeof(Bot) },
-            { 7, typeof(Rival) },
+            { 7, typeof(Friend) },
             { 8, typeof(PathTrack) },
             { 9, typeof(Goal) },
             { 10, typeof(PlayerCar) },

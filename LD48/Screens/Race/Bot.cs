@@ -41,12 +41,6 @@ namespace LD48
                 }
             }
             base.Update(gameTime);
-
-            foreach (var goal in Race.instance.goals)
-            {
-                if (goal.Mask.ColMask(Mask))
-                    Race.instance.Loose();
-            }
         }
 
         public override void Draw(GameTime gameTime)

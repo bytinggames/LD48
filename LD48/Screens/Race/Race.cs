@@ -277,7 +277,7 @@ namespace LD48
                                     });
 
                                     if (carIndex == 0)
-                                        bot = new Rival(path);
+                                        bot = new Friend(path);
                                     else
                                         bot = new Bot(carIndex, path);
                                     AddEntity(bot);
