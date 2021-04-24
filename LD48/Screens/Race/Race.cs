@@ -59,6 +59,9 @@ namespace LD48
 
             player = entities.Find(f => f is Player) as Player;
 
+            PlayerCar playerCar = entities.Find(f => f is PlayerCar) as PlayerCar;
+            player.Pos = playerCar.Pos;
+
             for (int i = 0; i < entities.Count; i++)
             {
                 OnAfterAddEntity(entities[i]);

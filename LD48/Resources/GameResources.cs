@@ -35,6 +35,7 @@ namespace LD48
             Fonts.LoadContent(content);
             Sounds.LoadContent(contentPath);
             DepthManager.Initialize(typeof(Depth));
+            Paths.Initialize(contentPath);
         }
 
         public void Dispose()

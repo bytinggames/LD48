@@ -29,10 +29,13 @@ namespace LD48
                 {
                     TrackFile.SaveTrack(race);
                 }
-                if (Input.leftControl.down && Input.o.pressed)
+                if (Input.leftControl.down)
                 {
-                    race.Dispose();
-                    screen.Current = TrackFile.LoadTrack();
+                    if (Input.numberPressed.HasValue)
+                    {
+                        race.Dispose();
+                        screen.Current = TrackFile.LoadTrack(Input.numberPressed.Value);
+                    }
                 }
             }
 
@@ -54,14 +57,20 @@ namespace LD48
 
         public IEnumerable<GameScreen> WholeGame()
         {
-            List<Entity> entities = new List<Entity>()
-            {
-                new Player(Vector2.Zero)
-            };
+            //int w = 100;
+            //int h = 100;d
 
-            entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
+            //List<Entity> entities = new List<Entity>()
+            //{
+            //    new Player(new Vector2(w,h) / 2f * Tile.size)
+            //};
+            //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
-            yield return new Race(entities, new bool[100,100]);
+
+            int level = 1;
+            yield return TrackFile.LoadTrack(level++);
+            yield return TrackFile.LoadTrack(level++);
+            yield return TrackFile.LoadTrack(level++);
         }
     }
 }

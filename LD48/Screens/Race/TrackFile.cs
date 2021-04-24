@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -6,22 +7,31 @@ namespace LD48
 {
     static class TrackFile
     {
-        static string filePath = Path.Combine(Environment.CurrentDirectory, "test.txt");
+        static string GetFilePath(int index) => string.Format(Paths.level, index);
 
-        public static Race LoadTrack()
+        static int loadedIndex = 0;
+
+        public static Race LoadTrack(int index)
         {
-            using (FileStream ms = File.Open(filePath, FileMode.Open))
+            loadedIndex = index;
+            string path = GetFilePath(index);
+            if (File.Exists(path))
             {
-                using (BinaryReader br = new BinaryReader(ms))
+                using (FileStream ms = File.Open(path, FileMode.Open))
                 {
-                    return br.Read<Race>();
+                    using (BinaryReader br = new BinaryReader(ms))
+                    {
+                        return br.Read<Race>();
+                    }
                 }
             }
+            else
+                return new Race(new List<Entity>() { new Player(new Vector2(100) / 2f * Tile.size) }, new bool[100, 100]);
         }
 
         public static void SaveTrack(Race race)
         {
-            using (FileStream fs = File.Create(filePath))
+            using (FileStream fs = File.Create(GetFilePath(loadedIndex)))
             {
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {
