@@ -49,9 +49,32 @@ namespace LD48
 
         public override void Update(GameTime gameTime)
         {
+            #region Push out of half-solids
+
+            Vector2 pushBack = Vector2.Zero;
+
+            foreach (var e in Race.instance.entities)
+            {
+                if (e == this)
+                    continue;
+                switch (e)
+                {
+                    case Car car:
+                        CollisionResult cr = Mask.DistToMask(car.Mask);
+                        if (cr.distance.HasValue)
+                        {
+                            pushBack += cr.axisCol * cr.distance.Value * 0.3f;
+                        }
+                        break;
+                }
+            }
+
+            #endregion
+
+
             Vector2 posPast = Pos;
-            Move(velocity);
-            velocity = Pos - posPast;
+            Move(velocity + pushBack);
+            velocity = Pos - posPast - pushBack;
 
             Vector2 lonDir = new Vector2((float)Math.Cos(orientation), (float)Math.Sin(orientation));
             float lon = Vector2.Dot(lonDir, velocity);
