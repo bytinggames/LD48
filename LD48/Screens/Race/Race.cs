@@ -29,12 +29,12 @@ namespace LD48
 
             for (int i = 0; i < 10; i++)
             {
-                entities.Add(new EMS_Polygon((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f));
+                entities.Add(new EMS_Polygon((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 300f));
             }
 
             for (int i = 0; i < 10; i++)
             {
-                entities.Add(new Car(Vector2.Zero, G.Rand.NextFloat() * 6f));
+                entities.Add(new Car((G.Rand.NextVector2Box() * 0.5f + Vector2.One) * 100f, G.Rand.NextFloat() * 6f));
             }
 
             camera = new Camera()
