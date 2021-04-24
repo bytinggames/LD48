@@ -24,12 +24,16 @@ namespace LD48
         Tile[,] tiles;
         bool[,] street;
 
+        bool won;
+
         enum EditorTool
         {
             None,
             Tile,
             House,
-            Car
+            Car,
+            Bot,
+            Goal,
         }
         EditorTool editorTool;
 
@@ -38,6 +42,9 @@ namespace LD48
         int pressedX, pressedY;
         KeyP mouseDown;
         int carIndex;
+
+        public List<Goal> goals = new List<Goal>();
+        public List<EM_Solid> solids = new List<EM_Solid>();
 
         public object[] GetConstructorValues() => new object[] { Entities, street };
 
@@ -91,10 +98,13 @@ namespace LD48
         }
         private void OnAfterAddEntity(Entity entity)
         {
+            if (entity is EM_Solid s)
+                solids.Add(s);
+
             if (entity is House h)
-            {
                 houses.Add(h);
-            }
+            else if (entity is Goal g)
+                goals.Add(g);
         }
 
         public override bool Update(GameTime gameTime)
@@ -137,6 +147,7 @@ namespace LD48
                     {
                         #region Tile
                         case EditorTool.Tile:
+                        case EditorTool.Goal:
 
                             int x = (int)Math.Floor(camera.mousePos.X / Tile.size);
                             int y = (int)Math.Floor(camera.mousePos.Y / Tile.size);
@@ -157,12 +168,23 @@ namespace LD48
                             if (yStart >= height)
                                 yStart = height - 1;
 
-                            for (int y1 = yStart; y1 <= yEnd; y1++)
-                                for (int x1 = xStart; x1 <= xEnd; x1++)
-                                {
-                                    street[x1, y1] = setStreet;
-                                }
-                            UpdateTiles(xStart - 1, xEnd + 1, yStart - 1, yEnd + 1);
+                            if (editorTool == EditorTool.Tile)
+                            {
+                                for (int y1 = yStart; y1 <= yEnd; y1++)
+                                    for (int x1 = xStart; x1 <= xEnd; x1++)
+                                    {
+                                        street[x1, y1] = setStreet;
+                                    }
+                                UpdateTiles(xStart - 1, xEnd + 1, yStart - 1, yEnd + 1);
+                            }
+                            else if (editorTool == EditorTool.Goal)
+                            {
+                                for (int y1 = yStart; y1 <= yEnd; y1++)
+                                    for (int x1 = xStart; x1 <= xEnd; x1++)
+                                    {
+                                        AddEntity(new Goal(new Vector2(x1,y1) * Tile.size));
+                                    }
+                            }
                             break;
                         #endregion
                         case EditorTool.House:
@@ -203,7 +225,36 @@ namespace LD48
 
                             if (Input.mbLeft.pressed)
                             {
-                                AddEntity(new Car(camera.mousePos, 0f, carIndex));
+                                Car car;
+                                if (carIndex == 0)
+                                    car = new PlayerCar(camera.mousePos, 0f);
+                                else
+                                    car = new Car(camera.mousePos, 0f);
+                                AddEntity(car);
+                            }
+                            break;
+                        case EditorTool.Bot:
+
+                            if (Input.mbLeft.pressed)
+                            {
+                                Bot bot = Entities.Find(f => f is Bot b && b.botID == carIndex) as Bot;
+                                if (bot == null)
+                                {
+                                    PathTrack path = new PathTrack(new List<Vector2>()
+                                    {
+                                        camera.mousePos
+                                    });
+
+                                    if (carIndex == 0)
+                                        bot = new Rival(path);
+                                    else
+                                        bot = new Bot(carIndex, path);
+                                    AddEntity(bot);
+                                }
+                                else
+                                {
+                                    bot.path.nodes.Add(camera.mousePos);
+                                }
                             }
                             break;
                     }
@@ -223,6 +274,9 @@ namespace LD48
 
             camera.UpdateEnd(G.ResX, G.ResY);
 
+            if (won)
+                return false;
+
             return true;
         }
 
@@ -232,16 +286,16 @@ namespace LD48
         }
 
         static readonly Point[] neighbours = new Point[]
-            {
-                    new Point(1,0),
-                    new Point(1,1),
-                    new Point(0, 1),
-                    new Point(-1,1),
-                    new Point(-1,0),
-                    new Point(-1,-1),
-                    new Point(0,-1),
-                    new Point(1,-1),
-            };
+        {
+            new Point(1,0),
+            new Point(1,1),
+            new Point(0, 1),
+            new Point(-1,1),
+            new Point(-1,0),
+            new Point(-1,-1),
+            new Point(0,-1),
+            new Point(1,-1),
+        };
 
 
         struct Rule
@@ -447,6 +501,11 @@ namespace LD48
         public void GetStorables()
         {
             //return 
+        }
+
+        internal void Win()
+        {
+            won = true;
         }
     }
 }

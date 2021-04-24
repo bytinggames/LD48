@@ -54,9 +54,9 @@ namespace LD48
                 Vector2 originalMove = move;
                 CollisionResult crTotal = default;
 
-                for (int i = 0; i < Race.instance.Entities.Count; i++)
+                for (int i = 0; i < Race.instance.solids.Count; i++)
                 {
-                    switch (Race.instance.Entities[i])
+                    switch (Race.instance.solids[i])
                     {
                         case EM_Solid obs:
                             CollisionResult cr = Mask.DistToMask(obs.Mask, move);
