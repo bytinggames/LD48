@@ -14,7 +14,7 @@ namespace LD48
 
         float lerp => (float)frame / frames;
 
-        public UpdrawLerp(int frames, Action<float> lerpUpdate, Action<float> lerpDraw)
+        public UpdrawLerp(int frames, Action<float> lerpUpdate, Action<float> lerpDraw = null)
         {
             this.frames = frames;
             this.lerpUpdate = lerpUpdate;

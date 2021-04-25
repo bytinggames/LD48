@@ -26,22 +26,22 @@ namespace LD48
         SpriteFont font = Fonts.big;
         Vector2 boxBorder = new Vector2(8f);
 
-        Color color;
+        public Color textColor;
 
         Texture2D corner;
         int cornerRadius = 4;
 
-        Color backColor = Color.DarkSlateBlue;
+        Color backColor = Color.Black;
 
         List<string> lines;
 
         Vector2 newLineSpace;
 
-        public DialogueBox(M_Rectangle viewInScreenSpace, string text, Color? color = null)
+        public DialogueBox(M_Rectangle viewInScreenSpace, string text, Color? textColor = null)
         {
             this.viewInScreenSpace = viewInScreenSpace.CloneRectangle();
             this.viewInScreenSpace.Enlarge(-8f);
-            this.color = color ?? Color.White;
+            this.textColor = textColor ?? Color.White;
 
             Vector2 textSize = CropText(text);
 
@@ -152,7 +152,7 @@ namespace LD48
 
             for (int i = 0; i < currentLine; i++)
             {
-                font.Draw(lines[i], drawPos, color);
+                font.Draw(lines[i], drawPos, textColor);
                 drawPos += newLineSpace;
             }
 
@@ -163,7 +163,7 @@ namespace LD48
                 if (currentChar > 0)
                 {
                     t1 = lines[currentLine].Remove((int)currentChar);
-                    font.Draw(t1, drawPos, color);
+                    font.Draw(t1, drawPos, textColor);
                     s = font.MeasureString(t1);
                 }
                 else
@@ -174,7 +174,7 @@ namespace LD48
                 }
                 string t2 = lines[currentLine][(int)currentChar].ToString();
                 Vector2 s2 = font.MeasureString(t2);
-                font.Draw(t2, Anchor.Left(drawPos + s + new Vector2(0, -s2.Y) / 2f), color, Vector2.One * 1.5f);
+                font.Draw(t2, Anchor.Left(drawPos + s + new Vector2(0, -s2.Y) / 2f), textColor, Vector2.One * 1.5f);
             }
         }
 

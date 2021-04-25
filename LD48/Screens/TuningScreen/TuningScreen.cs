@@ -17,13 +17,15 @@ namespace LD48
 
         protected float height;
 
-        const float carHeight = 16f;
+        public const int CarHeight = 16;
 
         UpdrawEnumerator stateMachine;
 
         Vector2 playerPos, friendPos;
         public Vector2 playerSpeechPos => playerPos - new Vector2(0, Textures.playerBig.Height);
         public Vector2 friendSpeechPos => friendPos - new Vector2(0, Textures.friendBig.Height);
+        public float[] angles = new float[3];
+        public Vector2[] offsets = new Vector2[3];
 
 
         public TuningScreen(float height, int index)
@@ -42,6 +44,11 @@ namespace LD48
             playerPos = screenView.BottomLeft + new Vector2(200, 0);
             friendPos = screenView.BottomLeft + new Vector2(350, 0);
             friendPos.X -= index * 25f;
+
+            if (index >= 2)
+                offsets[0].X = -10000;
+            if (index >= 3)
+                offsets[1].X = -10000;
         }
 
         public override void Draw(GameTime gameTime)
@@ -51,7 +58,13 @@ namespace LD48
             G.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: screenMatrix);
 
             Textures.wheel.Draw(Anchor.BottomLeft(screenView.BottomLeft));
-            Textures.carBody.Draw(Anchor.BottomLeft(screenView.BottomLeft + new Vector2(0, -carHeight * height)));
+
+            Vector2 pos = screenView.BottomLeft + new Vector2(0, -CarHeight * height);
+            for (int i = 0; i < GeneratedTextures.carParts.Length; i++)
+            {
+                pos.Y -= GeneratedTextures.carParts[i].Height;
+                GeneratedTextures.carParts[i].Draw(Anchor.TopLeft(pos + offsets[i]), null,null, null,angles[i]);
+            }
 
             Textures.playerBig.Draw(Anchor.Bottom(playerPos));
             Textures.friendBig.Draw(Anchor.Bottom(friendPos));

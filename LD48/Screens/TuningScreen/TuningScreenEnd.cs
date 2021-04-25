@@ -34,6 +34,10 @@ namespace LD48
         {
             protected override IEnumerable<string> GetDialogue()
             {
+                Player();
+                //yield return "how come you 
+
+                yield return "Dialogue1";
                 throw new NotImplementedException();
                 // is pissed
                 // why did you fall for my trap [subtiler]

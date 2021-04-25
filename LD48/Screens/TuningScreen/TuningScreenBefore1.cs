@@ -47,21 +47,21 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 Friend();
-                yield return "You know..";
+                yield return "you know..";
                 yield return "I tuned my car";
                 Swap();
-                yield return "Again?";
+                yield return "again?";
                 Swap();
-                yield return "Yup!";
-                yield return "It's much faster now";
+                yield return "yup!";
+                yield return "it's much faster now";
                 Swap();
-                yield return "What did you change?";
+                yield return "what did you change?";
                 Swap();
                 yield return "It's much deeper to the ground now";
                 Swap();
-                yield return "You lowered it?";
+                yield return "you lowered it?";
                 Swap();
-                yield return "Yeaaah";
+                yield return "yeaaah";
                 yield return "heard lowering the mass of a car improves it's grip";
                 yield return "you know...";
                 yield return "physics!";
@@ -111,6 +111,7 @@ namespace LD48
                 yield return "last is eliminated each round";
                 Swap();
                 yield return "sure";
+                yield return "let's go";
             }
         }
     }

@@ -582,9 +582,7 @@ namespace LD48
         {
             if (Ingame.instance.editorLevel <= 0)
             {
-                yield return new UpdrawBlend(false);
-                // Before Traffic Lights
-                // Traffic Lights
+                //yield return new UpdrawBlend(false);
                 yield return new UpdrawTrafficLights(() => pauseGame = false, level);
 
                 if (Ingame.instance.getOutCutscene && Ingame.instance.level == 1)

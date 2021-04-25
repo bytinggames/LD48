@@ -29,10 +29,22 @@ namespace LD48
             yield return new UpdrawBlend(false);
             yield return new Dialogue1();
             //yield return new CutCar();
+
+            // rip off from car
+            yield return new UpdrawDelay(30);
+            angles[0] = 0.05f;
+            yield return new UpdrawDelay(30);
+            yield return new UpdrawLerp(60, f =>
+            {
+                offsets[0].X = -(Textures.carBody.Width  + 10)* f;
+            });
+            yield return new UpdrawDelay(30);
+
             yield return new UpdrawLerp(150, f =>
             {
                 height = h - f;
-            }, null);
+            });
+            yield return new UpdrawDelay(60);
             yield return new Dialogue2();
             yield return new UpdrawBlend(true);
         }
@@ -47,13 +59,11 @@ namespace LD48
                 Swap();
                 yield return "but MAAAAN it was awesome!";
                 yield return "did you see the look on their faces?";
-                Swap();
-                yield return "no";
-                Swap();
-                yield return "They really didn't see that coming";
+                yield return "they really didn't see that coming";
                 yield return "I'm SO hyped for next race!";
                 Swap();
                 yield return "but you lost";
+                yield return "you are disqualified";
                 Swap();
                 yield return "aah, don't worry, the winner died in a car accident when driving home";
                 yield return "how ironic";
@@ -66,13 +76,17 @@ namespace LD48
                 yield return "what?";
                 yield return "how?";
                 yield return "the bottom of my car is demolished";
-                yield return "I don't have the money";
+                yield return "I don't have money to fix it";
                 yield return "my children are worried";
+                yield return "and I have to look out for aunt perry's dog";
                 Swap();
+                yield return "shhh...";
                 yield return "just go deeper";
                 Swap();
                 yield return "not possible";
                 Swap();
+                yield return "and yet it is";
+                yield return "your car will be lighter to push";
                 yield return "just watch...";
             }
         }
@@ -81,7 +95,8 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 Player();
-                yield return "dope";
+                yield return "...";
+                yield return "neat";
             }
         }
     }

@@ -28,6 +28,17 @@ namespace LD48
         {
             yield return new UpdrawBlend(false);
             yield return new Dialogue1();
+
+            // rip off from car
+            yield return new UpdrawDelay(30);
+            angles[1] = 0.05f;
+            yield return new UpdrawDelay(30);
+            yield return new UpdrawLerp(60, f =>
+            {
+                offsets[1].X = -(Textures.carBody.Width + 10) * f;
+            });
+            yield return new UpdrawDelay(30);
+
             yield return new UpdrawLerp(150, f =>
             {
                 height = h - f;
@@ -40,21 +51,34 @@ namespace LD48
         {
             protected override IEnumerable<string> GetDialogue()
             {
-                throw new NotImplementedException();
-                // verzweifelt
-                // man chill
-                // nee!
-                // you have to win!
-                // there's only one way... going deeper, losing weight!
-                // ok
+                Friend();
+                yield return "damn...";
+                yield return "now I lost for good... :(";
+                Swap();
+                yield return "...";
+                Swap();
+                yield return "I need to tell you something";
+                yield return "you see all this fuss about the race";
+                yield return "I just thought I could...";
+                yield return "I could win, grab the money and get my life back on track";
+                Swap();
+                yield return "okay, but-";
+                Swap();
+                yield return "I NEED YOU TO WIN FOR ME!";
+                Swap();
+                yield return "ok";
+                Swap();
+                yield return "you know what needs to be done now";
+                Swap();
+                yield return "sure";
             }
         }
         class Dialogue2 : TuningDialogue
         {
             protected override IEnumerable<string> GetDialogue()
             {
-                throw new NotImplementedException();
-                // good luck
+                Friend();
+                yield return "good luck old friend";
             }
         }
     }

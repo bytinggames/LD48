@@ -15,9 +15,14 @@ namespace LD48
         protected override IEnumerable<string> GetDialogue()
         {
             Friend();
-            yield return "noooo, the car does not work this tads fsdf sad f dsfgdf gdfgdsfgdsf gdfs gsdf gdfgdfsgdfgdsfgdfgfdgdsfgdsfgdf gsfgdf dsfg dfg ";
-            Player();
-            yield return "yes...";
+            yield return "WHAT?!";
+            yield return "no.. not now...";
+            yield return "IT WON'T MOVE";
+            yield return "maybe it will start when I push it";
+            Swap();
+            yield return "seriously?";
+            Swap();
+            yield return "ANYTHING but the last place!";
         }
     }
 }

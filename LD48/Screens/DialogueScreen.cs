@@ -29,6 +29,8 @@ namespace LD48
 
         static Matrix screenMatrix = Matrix.CreateScale(4f);
 
+        Color textColor;
+
         static M_Rectangle GetScreenView()
         {
             M_Rectangle rect = new M_Rectangle(0, 0, G.ResX, G.ResY);
@@ -43,7 +45,7 @@ namespace LD48
             this.screenView = screenView;
             dialogue = GetDialogue().GetEnumerator();
             dialogue.MoveNext();
-            box = new DialogueBox(screenView, dialogue.Current);
+            box = new DialogueBox(screenView, dialogue.Current, textColor);
         }
 
         public override bool Update(GameTime gameTime)
@@ -53,9 +55,9 @@ namespace LD48
                 if (!dialogue.MoveNext())
                     return false;
                 box.Dispose();
-                box = new DialogueBox(screenView, dialogue.Current);
+                box = new DialogueBox(screenView, dialogue.Current, textColor);
             }
-            
+
 
             return true;
         }
@@ -75,8 +77,32 @@ namespace LD48
         //{
         //    Fonts.big.Draw(dialogue.Current, Anchor.Center(G.Res / 8f), currentVoice == Voice.Player ? Color.White : currentVoice == Voice.Friend ? Color.Purple : Color.Red);
         //}
-        protected void Swap() => currentVoice = currentVoice == Voice.Friend ? Voice.Player : Voice.Friend;
-        protected void Friend() => currentVoice = Voice.Friend;
-        protected void Player() => currentVoice = Voice.Player;
+        protected void Swap()
+        {
+            if (currentVoice == Voice.Friend)
+                Player();
+            else
+                Friend();
+        }
+        protected void Friend() => ChangeVoice(Voice.Friend);
+        protected void Player() => ChangeVoice(Voice.Player);
+
+        private void ChangeVoice(Voice voice)
+        {
+            switch (voice)
+            {
+                case Voice.Unknown:
+                    break;
+                case Voice.Player:
+                    textColor = new Color(0,200,0);
+                    break;
+                case Voice.Friend:
+                    textColor = new Color(128, 0, 255);
+                    break;
+                default:
+                    break;
+            }
+            currentVoice = voice;
+        }
     }
 }
