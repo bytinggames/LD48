@@ -10,7 +10,7 @@ namespace LD48
 {
     public static class Textures
     {
-        public static Texture2D player, car, floor, friend, goal;
+        public static Texture2D player, car, floor, friend, goal, trafficLight;
 
         public static void LoadContent(GraphicsDevice gDevice, string contentPath)
         {

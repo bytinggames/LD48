@@ -16,6 +16,7 @@ namespace LD48
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public Camera camera;
         public Player player;
+        public Friend friend;
 
         public static Race instance;
 
@@ -26,7 +27,7 @@ namespace LD48
 
         public bool? won;
 
-        bool pauseGame = false;
+        bool pauseGame = true;
 
         enum EditorTool
         {
@@ -50,6 +51,11 @@ namespace LD48
 
         Car carBuild;
 
+        UpdrawEnumerator gameState;
+
+        public Matrix screenMatrix = Matrix.CreateScale(4f);
+        public Matrix screenMatrixInverse;
+
         public object[] GetConstructorValues() => new object[] { Entities, street };
 
         public Race(List<Entity> entities, bool[,] street)
@@ -63,6 +69,7 @@ namespace LD48
             tiles = new Tile[width, height];
 
             player = entities.Find(f => f is Player) as Player;
+            friend = entities.Find(f => f is Friend) as Friend;
 
             PlayerCar playerCar = entities.Find(f => f is PlayerCar) as PlayerCar;
             player.Pos = playerCar.Pos;
@@ -97,6 +104,10 @@ namespace LD48
                 }
             }
             UpdateTiles(0, width, 0, height);
+
+            screenMatrixInverse = Matrix.Invert(screenMatrix);
+
+            gameState = new UpdrawEnumerator(GetRaceEnumerable());
         }
 
         private void AddEntity(Entity entity)
@@ -141,9 +152,10 @@ namespace LD48
                     Entities[i].Update(gameTime);
                 }
             }
+#if DEBUG
             else
                 player.Update(gameTime);
-
+#endif
 
 
             #region Editor
@@ -300,6 +312,7 @@ namespace LD48
             }
             #endregion
 
+            gameState.Update(gameTime);
 
             camera.targetPos = player.Pos;
 
@@ -481,6 +494,8 @@ namespace LD48
                 });
             }
 
+            gameState.Current?.Draw(gameTime);
+
             G.SpriteBatch.End();
 
             List<House> ordered = new List<House>();
@@ -515,9 +530,13 @@ namespace LD48
                 Entities[i].DrawOverlay(gameTime);
             }
 
-            G.SpriteBatch.Begin();
+            G.SpriteBatch.Begin(samplerState:SamplerState.PointClamp, transformMatrix: screenMatrix);
 
+#if DEBUG
             Fonts.big.Draw("Editor Tool: " + editorTool + "\ncarIndex: " + carIndex, Vector2.One * 16f, Color.Black);
+#endif
+
+            gameState.Current?.DrawScreen();
 
             G.SpriteBatch.End();
         }
@@ -547,6 +566,25 @@ namespace LD48
         internal void Loose()
         {
             won = false;
+        }
+
+
+        IEnumerable<Updraw> GetRaceEnumerable()
+        {
+            yield return new UpdrawFade(false);
+            // Before Traffic Lights
+            // Traffic Lights
+            yield return new UpdrawTrafficLights(() => pauseGame = false);
+            // Cars dont work
+            yield return new UpdrawDelay(60 * 3);
+            yield return new RaceDialogue();
+            // Talk
+            // Get out
+            player.enabled = true;
+            friend.enabled = true;
+            // Game
+            yield return new UpdrawDelay(100000);
+            yield return new UpdrawFade(true);
         }
     }
 }

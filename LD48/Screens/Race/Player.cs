@@ -21,6 +21,8 @@ namespace LD48
 
         const float moveSpeed = 2f;
 
+        public bool enabled = false;
+
         public override object[] GetConstructorValues() => new object[] { Pos };
 
         public Player(Vector2 pos) : base(Textures.player, new M_Circle(pos, radius))
@@ -54,6 +56,9 @@ namespace LD48
 
         public override void Update(GameTime gameTime)
         {
+            if (!enabled)
+                return;
+
             for (int i = 0; i < keys.Count; i++)
             {
                 keys[i].Update();
@@ -135,6 +140,8 @@ namespace LD48
 
         public override void Draw(GameTime gameTime)
         {
+            if (!enabled)
+                return;
             DrawMask();
             base.Draw(gameTime);
         }

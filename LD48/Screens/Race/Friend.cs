@@ -14,6 +14,8 @@ namespace LD48
 
         public override object[] GetConstructorValues() => new object[] { path };
 
+        public bool enabled = false;
+
         public Friend(PathTrack path) : base(0, path)
         {
             playerTexOrientation = orientation;
@@ -21,6 +23,9 @@ namespace LD48
 
         public override void Update(GameTime gameTime)
         {
+            if (!enabled)
+                return;
+
             base.Update(gameTime);
 
             foreach (var goal in Race.instance.goals)

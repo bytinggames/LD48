@@ -20,6 +20,9 @@ namespace LD48
 
         public bool Update(GameTime gameTime)
         {
+            if (Current == null)
+                return false;
+
             if (!Current.Update(gameTime))
             {
                 Current.Dispose();

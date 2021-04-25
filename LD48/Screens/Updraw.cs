@@ -15,5 +15,7 @@ namespace LD48
         public virtual void Dispose()
         {
         }
+
+        public virtual void DrawScreen() { }
     }
 }

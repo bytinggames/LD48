@@ -52,9 +52,14 @@ namespace LD48
             G.GDevice.Clear(Color.Black);
             G.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Matrix.CreateScale(4f));
 
-            Fonts.big.Draw(dialogue.Current, Anchor.Center(G.Res / 8f), currentVoice == Voice.Player ? Color.White : currentVoice == Voice.Friend ? Color.Purple : Color.Red);
+            DrawInner();
 
             G.SpriteBatch.End();
+        }
+
+        protected void DrawInner()
+        {
+            Fonts.big.Draw(dialogue.Current, Anchor.Center(G.Res / 8f), currentVoice == Voice.Player ? Color.White : currentVoice == Voice.Friend ? Color.Purple : Color.Red);
         }
 
         protected void Friend() => currentVoice = Voice.Friend;

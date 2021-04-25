@@ -16,6 +16,7 @@ namespace LD48
         [Order] public static DepthLayer house;
         [Order] public static DepthLayer editorTools;
         [Order] public static DepthLayer ui;
+        [Order] public static DepthLayer blackFade;
         [Order] public static DepthLayer one;
     }
 }
