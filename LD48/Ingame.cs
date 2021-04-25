@@ -14,8 +14,16 @@ namespace LD48
 
         UpdrawEnumerator screen;
 
+        public static Ingame instance;
+
+        public int level = 0;
+
         public Ingame(SpriteBatch spriteBatch, GraphicsDevice gDevice)
         {
+            if (instance != null)
+                throw new Exception();
+            instance = this;
+
             this.spriteBatch = spriteBatch;
             this.gDevice = gDevice;
 
@@ -53,6 +61,7 @@ namespace LD48
         public void Dispose()
         {
             screen.Current?.Dispose();
+            instance = null;
         }
 
         public IEnumerable<Updraw> WholeGame()
@@ -66,13 +75,12 @@ namespace LD48
             //};
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
-            int level = 1;
             //yield return new DialogueIntro();
-            foreach (var item in Level(level++)) yield return item;
+            foreach (var item in Level(++level)) yield return item;
             yield return new DialogueIntro();
-            foreach (var item in Level(level++)) yield return item;
+            foreach (var item in Level(++level)) yield return item;
             yield return new DialogueIntro();
-            foreach (var item in Level(level++)) yield return item;
+            foreach (var item in Level(++level)) yield return item;
             yield return new DialogueIntro();
         }
 

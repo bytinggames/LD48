@@ -111,11 +111,8 @@ namespace LD48
 
             screenView = new M_Rectangle(0, 0, G.ResX, G.ResY);
             screenView.Transform(screenMatrixInverse);
-        }
 
-        internal void SetLevel(int index)
-        {
-            gameState = new UpdrawEnumerator(GetRaceEnumerable(index));
+            gameState = new UpdrawEnumerator(GetRaceEnumerable(Ingame.instance.level));
         }
 
         private void AddEntity(Entity entity)
@@ -579,12 +576,12 @@ namespace LD48
         {
             if (level == 1)
             {
-                //yield return new UpdrawFade(false);
-                //// Before Traffic Lights
-                //// Traffic Lights
-                //yield return new UpdrawTrafficLights(() => pauseGame = false);
-                //// Cars dont work
-                //yield return new UpdrawDelay(60 * 3);
+                yield return new UpdrawBlend(false);
+                // Before Traffic Lights
+                // Traffic Lights
+                yield return new UpdrawTrafficLights(() => pauseGame = false, level);
+                // Cars dont work
+                yield return new UpdrawDelay(60 * 3);
                 yield return new RaceDialogueLevel1();
                 // Talk
                 // Get out
@@ -594,7 +591,7 @@ namespace LD48
             player.enabled = true;
             friend.enabled = true;
             yield return new UpdrawWhile(() => !won.HasValue);
-            yield return new UpdrawFade(true);
+            yield return new UpdrawBlend(true);
         }
     }
 }

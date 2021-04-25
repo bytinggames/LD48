@@ -10,7 +10,15 @@ namespace LD48
     {
         float playerTexOrientation;
 
-        protected override float GetSpeed() => 0.2f;
+        protected override float GetSpeed()
+        {
+            switch (Ingame.instance.level)
+            {
+                case 1: return 0.05f;
+                case 2: return 0.1f;
+                default: return 0.2f;
+            }
+        }
 
         public override object[] GetConstructorValues() => new object[] { path };
 

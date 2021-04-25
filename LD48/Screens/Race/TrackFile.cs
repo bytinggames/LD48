@@ -13,6 +13,8 @@ namespace LD48
 
         public static Race LoadTrack(int index)
         {
+            G.Rand = new Random(index + 1);
+
             Race race;
 
             loadedIndex = index;
@@ -29,7 +31,6 @@ namespace LD48
             }
             else
                 race = new Race(new List<Entity>() { new Player(new Vector2(100) / 2f * Tile.size) }, new bool[100, 100]);
-            race.SetLevel(index);
 
             return race;
         }

@@ -6,12 +6,12 @@ using System.Text;
 
 namespace LD48
 {
-    class UpdrawFade : Updraw
+    class UpdrawBlend : Updraw
     {
-        const int totalFrames = 120;
+        const int totalFrames = 60;
         int frames = totalFrames;
         bool blackFadeIn;
-        public UpdrawFade(bool blackFadeIn)
+        public UpdrawBlend(bool blackFadeIn)
         {
             this.blackFadeIn = blackFadeIn;
         }
@@ -30,14 +30,11 @@ namespace LD48
 
         public override void DrawScreen()
         {
-            Depth.blackFade.Set(() =>
-            {
-                float lerp = (float)frames / totalFrames;
-                if (blackFadeIn)
-                    lerp = 1f - lerp;
-                lerp *= lerp;
-                new M_Rectangle(0, 0, G.ResX, G.ResY).Draw(Color.Black * lerp);
-            });
+            float lerp = (float)frames / totalFrames;
+            if (blackFadeIn)
+                lerp = 1f - lerp;
+            lerp *= lerp;
+            new M_Rectangle(0, 0, G.ResX, G.ResY).Draw(Color.Black * lerp);
         }
     }
 }

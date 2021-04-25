@@ -19,8 +19,11 @@ namespace LD48
 
         UpdrawEnumerator state;
 
-        public UpdrawTrafficLights(Action onFadeOut)
+        int level;
+
+        public UpdrawTrafficLights(Action onFadeOut, int level)
         {
+            this.level = level;
             this.onFadeOut = onFadeOut;
 
             colors = new Color[3];
@@ -57,12 +60,9 @@ namespace LD48
         IEnumerable<Updraw> GetStates()
         {
             yield return new UpdrawLerp(30, f => fade = f, null);
-            yield return new UpdrawDelay(60);
             colors[0] = Color.Red;
             yield return new UpdrawDelay(60);
             colors[1] = Color.Red;
-            yield return new UpdrawDelay(60);
-            colors[2] = Color.Red;
             yield return new UpdrawDelay(60);
             for (int i = 0; i < colors.Length; i++)
                 colors[i] = Color.Lime;
