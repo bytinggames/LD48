@@ -13,6 +13,8 @@ namespace LD48
 
         public static Race LoadTrack(int index)
         {
+            Race race;
+
             loadedIndex = index;
             string path = GetFilePath(index);
             if (File.Exists(path))
@@ -21,12 +23,15 @@ namespace LD48
                 {
                     using (BinaryReader br = new BinaryReader(ms))
                     {
-                        return br.Read<Race>();
+                        race = br.Read<Race>();
                     }
                 }
             }
             else
-                return new Race(new List<Entity>() { new Player(new Vector2(100) / 2f * Tile.size) }, new bool[100, 100]);
+                race = new Race(new List<Entity>() { new Player(new Vector2(100) / 2f * Tile.size) }, new bool[100, 100]);
+            race.SetLevel(index);
+
+            return race;
         }
 
         public static void SaveTrack(Race race)

@@ -71,7 +71,11 @@ namespace LD48
             {
                 Vector2 lineSize = font.MeasureString(lines[i]);
                 if (lineSize.X < maxLength)
+                {
+                    if (lineSize.X > maxWidth)
+                        maxWidth = lineSize.X;
                     break;
+                }
 
                 int jOver;
                 int lastSpace = -1;
@@ -92,6 +96,7 @@ namespace LD48
                 lines.Insert(i + 1, lines[i].Substring(split));
                 lines[i] = lines[i].Remove(split);
                 lineSize = font.MeasureString(lines[i]);
+
                 if (lineSize.X > maxWidth)
                     maxWidth = lineSize.X;
             }
@@ -176,7 +181,7 @@ namespace LD48
         {
             key.Update();
 
-            if (currentChar > 0)
+            if (currentLine > 0 || currentChar > 0)
             {
                 if (key.pressed)
                 {

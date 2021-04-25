@@ -111,8 +111,11 @@ namespace LD48
 
             screenView = new M_Rectangle(0, 0, G.ResX, G.ResY);
             screenView.Transform(screenMatrixInverse);
+        }
 
-            gameState = new UpdrawEnumerator(GetRaceEnumerable());
+        internal void SetLevel(int index)
+        {
+            gameState = new UpdrawEnumerator(GetRaceEnumerable(index));
         }
 
         private void AddEntity(Entity entity)
@@ -317,14 +320,12 @@ namespace LD48
             }
             #endregion
 
-            gameState.Update(gameTime);
+            if (!gameState.Update(gameTime))
+                return false;
 
             camera.targetPos = player.Pos;
 
             camera.UpdateEnd(G.ResX, G.ResY);
-
-            if (won.HasValue)
-                return false;
 
             return true;
         }
@@ -574,21 +575,25 @@ namespace LD48
         }
 
 
-        IEnumerable<Updraw> GetRaceEnumerable()
+        IEnumerable<Updraw> GetRaceEnumerable(int level)
         {
-            //yield return new UpdrawFade(false);
-            //// Before Traffic Lights
-            //// Traffic Lights
-            //yield return new UpdrawTrafficLights(() => pauseGame = false);
-            //// Cars dont work
-            //yield return new UpdrawDelay(60 * 3);
-            yield return new RaceDialogueLevel1();
-            // Talk
-            // Get out
+            if (level == 1)
+            {
+                //yield return new UpdrawFade(false);
+                //// Before Traffic Lights
+                //// Traffic Lights
+                //yield return new UpdrawTrafficLights(() => pauseGame = false);
+                //// Cars dont work
+                //yield return new UpdrawDelay(60 * 3);
+                yield return new RaceDialogueLevel1();
+                // Talk
+                // Get out
+            }
+
+            // Game
             player.enabled = true;
             friend.enabled = true;
-            // Game
-            yield return new UpdrawDelay(100000);
+            yield return new UpdrawWhile(() => !won.HasValue);
             yield return new UpdrawFade(true);
         }
     }

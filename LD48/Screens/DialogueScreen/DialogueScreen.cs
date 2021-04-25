@@ -13,7 +13,6 @@ namespace LD48
 
         protected abstract IEnumerable<string> GetDialogue();
 
-        KeyCollection key;
 
         protected DialogueBox box;
 
@@ -46,22 +45,19 @@ namespace LD48
             dialogue.MoveNext();
             box = new DialogueBox(screenView, dialogue.Current);
 
-            key = new KeyCollection(Input.space, Input.enter, Input.x, Input.z, Input.mbLeft);
-
             Drawer.roundPositionTo = 0.25f;
         }
 
         public override bool Update(GameTime gameTime)
         {
-            key.Update();
-            if (key.pressed)
+            if (!box.Update(gameTime))
             {
                 if (!dialogue.MoveNext())
                     return false;
                 box.Dispose();
                 box = new DialogueBox(screenView, dialogue.Current);
             }
-            box.Update(gameTime);
+            
 
             return true;
         }
