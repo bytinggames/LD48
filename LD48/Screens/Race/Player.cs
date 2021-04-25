@@ -38,10 +38,10 @@ namespace LD48
         {
             Pos = pos;
 
-            right = new KeyCollection(Input.d);
-            up = new KeyCollection(Input.w);
-            left = new KeyCollection(Input.a);
-            down = new KeyCollection(Input.s);
+            right = new KeyCollection(Input.d, Input.right);
+            up = new KeyCollection(Input.w, Input.up);
+            left = new KeyCollection(Input.a, Input.left);
+            down = new KeyCollection(Input.s, Input.down);
             keys.AddRange(new List<KeyCollection>()
             {
                 right, up, left, down
@@ -183,6 +183,7 @@ namespace LD48
                                     car.ApplyForce(Pos, orientationDir, 10f);
                                     kickedByMyself = true;
                                     hitAny = true;
+                                    Race.instance.screenshakeStrength += 5f;
                                 }
                                 break;
                         }

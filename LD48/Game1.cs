@@ -28,7 +28,7 @@ namespace LD48
         protected override void Initialize()
         {
             Window.IsBorderless = true;
-            Window.Position = new Point(1920, 0);
+            Window.Position = new Point(0, 0);
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.ApplyChanges();
@@ -79,6 +79,7 @@ namespace LD48
 
             if (IsActive)
             {
+#if DEBUG
                 if (Input.esc.pressed)
                 {
                     Exit();
@@ -91,8 +92,10 @@ namespace LD48
                 }
 
                 windowHelper.UpdateBasicInputFunctions();
+#endif
 
                 int iterations = 1;
+#if DEBUG
                 if (Input.leftShift.down)
                     iterations = 10;
                 if (Input.rightControl.down)
@@ -101,6 +104,7 @@ namespace LD48
                     if (Input.rightAlt.pressed)
                         iterations = 1;
                 }
+#endif
                 for (int i = 0; i < iterations; i++)
                 {
                     if (i > 0)

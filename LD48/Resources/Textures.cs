@@ -11,7 +11,7 @@ namespace LD48
 {
     public static class Textures
     {
-        public static Texture2D player, car1Color, car1NoColor, floor, friend, goal, trafficLight, controlsMouse, controlsKeys, wheel, carBody, playerBig, friendBig;
+        public static Texture2D player, car1Color, car1NoColor, floor, friend, goal, trafficLight, controlsMouse, controlsKeys, wheel, carBodyColor, carBodyNoColor, playerBig, friendBig, tuningBG;
 
         public static void LoadContent(GraphicsDevice gDevice, string contentPath)
         {
@@ -28,21 +28,25 @@ namespace LD48
 
     public static class GeneratedTextures
     {
-        public static Texture2D[] carParts;
+        public static Texture2D[,] carParts;
 
         internal static void LoadContent()
         {
             int height = TuningScreen.CarHeight;
 
-            carParts = new Texture2D[3];
-            int y = 0;
-            int w = Textures.carBody.Width;
-            Color[] colors = Textures.carBody.ToColor();
-            carParts[2] = colors.Crop(w, new Rectangle(0, y, w, Textures.carBody.Height - height * 2)).ToTexture(w, G.GDevice);
-            y += carParts[2].Height;
-            carParts[1] = colors.Crop(w, new Rectangle(0, y, w, height)).ToTexture(w, G.GDevice);
-            y += carParts[1].Height;
-            carParts[0] = colors.Crop(w, new Rectangle(0, y, w, height)).ToTexture(w, G.GDevice);
+            carParts = new Texture2D[2, 3];
+            int w = Textures.carBodyColor.Width;
+
+            for (int i = 0; i < 2; i++)
+            {
+                int y = 0;
+                Color[] colors = (i == 0 ? Textures.carBodyColor : Textures.carBodyNoColor).ToColor();
+                carParts[i,2] = colors.Crop(w, new Rectangle(0, y, w, Textures.carBodyColor.Height - height * 2)).ToTexture(w, G.GDevice);
+                y += carParts[i, 2].Height;
+                carParts[i, 1] = colors.Crop(w, new Rectangle(0, y, w, height)).ToTexture(w, G.GDevice);
+                y += carParts[i, 1].Height;
+                carParts[i, 0] = colors.Crop(w, new Rectangle(0, y, w, height)).ToTexture(w, G.GDevice);
+            }
         }
     }
 }

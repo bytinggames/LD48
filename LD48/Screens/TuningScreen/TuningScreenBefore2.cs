@@ -38,7 +38,7 @@ namespace LD48
             Sounds.moveRippedCarPart.Play();
             yield return new UpdrawLerp(60, f =>
             {
-                offsets[0].X = -(Textures.carBody.Width  + 10)* f;
+                offsets[0].X = -(Textures.carBodyColor.Width  + 10)* f;
             });
             yield return new UpdrawDelay(30);
 

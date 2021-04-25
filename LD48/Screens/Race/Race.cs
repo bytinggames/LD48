@@ -89,8 +89,10 @@ namespace LD48
             camera = new Camera()
             {
                 moveSpeed = 0.1f,
-                zoomControl = true,
             };
+#if DEBUG
+            camera.zoomControl = true;
+#endif
             camera.zoom = camera.targetZoom = 4f;
             camera.targetPos = player.Pos;
             camera.JumpToTarget();
@@ -166,7 +168,7 @@ namespace LD48
                 player.Update(gameTime);
 #endif
 
-
+#if DEBUG
             #region Editor
 
             if (Input.e.pressed)
@@ -320,7 +322,7 @@ namespace LD48
 
             }
             #endregion
-
+#endif
 
             camera.targetPos = player.Pos;
 
@@ -441,9 +443,11 @@ namespace LD48
             }
         }
 
+        public float screenshakeStrength;
+
         public override void Draw(GameTime gameTime)
         {
-            G.GDevice.Clear(Color.CornflowerBlue);
+            G.GDevice.Clear(Color.Black);
 
             Drawer.roundPositionTo = 0f;// 0.25f;
 
@@ -452,6 +456,12 @@ namespace LD48
             //    DepthBufferEnable = true,
             //    DepthBufferFunction = CompareFunction.LessEqual,
             //};
+
+
+            Vector3 screenshake = G.Rand.NextVector3Box() * screenshakeStrength;
+            screenshake.Z = 0;
+            screenshakeStrength *= 0.8f;
+            camera.matrix *= Matrix.CreateTranslation(screenshake);
 
             G.SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, camera.matrix);
             DrawM.basicEffect.World = camera.matrix;
@@ -493,6 +503,7 @@ namespace LD48
             //    }
             //});
 
+#if DEBUG
             if (editorTool == EditorTool.Goal || editorTool == EditorTool.House || editorTool == EditorTool.Tile)
             {
                 Depth.editorTools.Set(() =>
@@ -503,6 +514,7 @@ namespace LD48
                     }
                 });
             }
+#endif
 
             gameState.Current?.Draw(gameTime);
 
@@ -535,10 +547,12 @@ namespace LD48
                 }
             }
 
-            for (int i = 0; i < Entities.Count; i++)
-            {
-                Entities[i].DrawOverlay(gameTime);
-            }
+//#if DEBUG
+//            for (int i = 0; i < Entities.Count; i++)
+//            {
+//                Entities[i].DrawOverlay(gameTime);
+//            }
+//#endif
 
             G.SpriteBatch.Begin(samplerState:SamplerState.PointClamp, transformMatrix: screenMatrix);
 
@@ -592,7 +606,7 @@ namespace LD48
         }
 
         static bool dialogue3Played = false;
-
+        List<Car> driveCars;
         IEnumerable<Updraw> GetRaceEnumerable(int level)
         {
             if (Ingame.instance.editorLevel <= 0)
@@ -607,6 +621,11 @@ namespace LD48
 
 
                 Sounds.engineStart.Play();
+
+                driveCars = Entities.FindAll(f => f is Bot || f is PlayerCar).Cast<Car>().ToList();
+                foreach (var item in driveCars)
+                    item.engineOn = true;
+
                 var engineSound = Sounds.engineLoop.SoundEffect.CreateInstance();
                 engineSound.IsLooped = true;
                 engineSound.Volume = 0f;
@@ -635,6 +654,8 @@ namespace LD48
 
                 if (!engineSound.IsDisposed)
                 {
+                    foreach (var item in driveCars)
+                        item.engineOn = false;
                     yield return new UpdrawLerp(30, f => engineSound.Volume = 1f - f);
                     engineSound.Stop();
                     engineSound.Dispose();
@@ -657,6 +678,8 @@ namespace LD48
         {
             // Cars dont work
             yield return new UpdrawDelay(60 * 2);
+            foreach (var item in driveCars)
+                item.engineOn = false;
             yield return new UpdrawLerp(60, f => engineSound.Volume = 1f - f);
 
             engineSound.Stop();

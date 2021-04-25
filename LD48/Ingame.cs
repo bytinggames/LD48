@@ -18,7 +18,11 @@ namespace LD48
         public static Ingame instance;
 
         public int level = 0;
+#if DEBUG
         public bool getOutCutscene = true;
+#else
+        public bool getOutCutscene = true;
+#endif
 
         public int editorLevel = 0;
 
@@ -44,6 +48,7 @@ namespace LD48
         {
             if (screen.Current is Race race)
             {
+#if DEBUG
                 if (Input.leftControl.down && Input.s.pressed)
                 {
                     TrackFile.SaveTrack(race);
@@ -56,6 +61,7 @@ namespace LD48
                         screen.Current = TrackFile.LoadTrack(Input.numberPressed.Value);
                     }
                 }
+#endif
             }
 
             if (!screen.Update(gameTime))

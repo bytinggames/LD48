@@ -17,7 +17,7 @@ namespace LD48
 
         protected float height;
 
-        public const int CarHeight = 16;
+        public const int CarHeight = 14;
 
         UpdrawEnumerator stateMachine;
 
@@ -57,13 +57,24 @@ namespace LD48
             Drawer.roundPositionTo = 0.25f;
             G.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: screenMatrix);
 
+            Textures.tuningBG.Draw(Anchor.BottomRight(screenView.BottomRight));
+
             Textures.wheel.Draw(Anchor.BottomLeft(screenView.BottomLeft));
 
-            Vector2 pos = screenView.BottomLeft + new Vector2(0, -CarHeight * height);
-            for (int i = 0; i < GeneratedTextures.carParts.Length; i++)
+            Color[] colors = new Color[2]
+                {
+                    Colors.player,
+                    Color.White
+                };
+
+            for (int i = 0; i < 2; i++)
             {
-                pos.Y -= GeneratedTextures.carParts[i].Height;
-                GeneratedTextures.carParts[i].Draw(Anchor.TopLeft(pos + offsets[i]), null,null, null,angles[i]);
+                Vector2 pos = screenView.BottomLeft + new Vector2(0, -CarHeight * height);
+                for (int j = 0; j < GeneratedTextures.carParts.GetLength(1); j++)
+                {
+                    pos.Y -= GeneratedTextures.carParts[i,j].Height;
+                    GeneratedTextures.carParts[i,j].Draw(Anchor.TopLeft(pos + offsets[j]), colors[i], null, null, angles[j]);
+                }
             }
 
             Textures.playerBig.Draw(Anchor.Bottom(playerPos));
