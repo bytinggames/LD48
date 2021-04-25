@@ -29,6 +29,8 @@ namespace LD48
 
         bool pauseGame = true;
 
+        public M_Rectangle screenView;
+
         enum EditorTool
         {
             None,
@@ -106,6 +108,9 @@ namespace LD48
             UpdateTiles(0, width, 0, height);
 
             screenMatrixInverse = Matrix.Invert(screenMatrix);
+
+            screenView = new M_Rectangle(0, 0, G.ResX, G.ResY);
+            screenView.Transform(screenMatrixInverse);
 
             gameState = new UpdrawEnumerator(GetRaceEnumerable());
         }
@@ -571,13 +576,13 @@ namespace LD48
 
         IEnumerable<Updraw> GetRaceEnumerable()
         {
-            yield return new UpdrawFade(false);
-            // Before Traffic Lights
-            // Traffic Lights
-            yield return new UpdrawTrafficLights(() => pauseGame = false);
-            // Cars dont work
-            yield return new UpdrawDelay(60 * 3);
-            yield return new RaceDialogue();
+            //yield return new UpdrawFade(false);
+            //// Before Traffic Lights
+            //// Traffic Lights
+            //yield return new UpdrawTrafficLights(() => pauseGame = false);
+            //// Cars dont work
+            //yield return new UpdrawDelay(60 * 3);
+            yield return new RaceDialogueLevel1();
             // Talk
             // Get out
             player.enabled = true;

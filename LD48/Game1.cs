@@ -93,6 +93,12 @@ namespace LD48
             int iterations = 1;
             if (Input.leftShift.down)
                 iterations = 10;
+            if (Input.rightControl.down)
+            {
+                iterations = 0;
+                if (Input.rightAlt.pressed)
+                    iterations = 1;
+            }
             for (int i = 0; i < iterations; i++)
             {
                 if (!ingame.Update(gameTime))
