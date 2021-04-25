@@ -20,7 +20,7 @@ namespace LD48
 
             foreach (var goal in Race.instance.goals)
             {
-                if (goal.Mask.ColMask(Mask))
+                if (goal.Mask.ColVector(Pos))
                     Race.instance.Win();
             }
         }

@@ -66,28 +66,35 @@ namespace LD48
 
         bool colLastFrame;
 
+        private bool IsBotWithoutCollisions() => this is Bot bot && bot.botID != 0;
+
         public override void Update(GameTime gameTime)
         {
             #region Push out of half-solids
 
             Vector2 pushBack = Vector2.Zero;
 
-            foreach (var e in Race.instance.Entities)
+            if (!IsBotWithoutCollisions())
             {
-                if (e == this)
-                    continue;
-                switch (e)
+                foreach (var e in Race.instance.Entities)
                 {
-                    case Car car:
-                        CollisionResult cr = Mask.DistToMask(car.Mask);
-                        if (cr.distance.HasValue)
-                        {
-                            pushBack += cr.axisCol * cr.distance.Value * 0.3f;
-                        }
-                        break;
+                    if (e == this)
+                        continue;
+                    switch (e)
+                    {
+                        case Car car:
+                            if (car.IsBotWithoutCollisions())
+                                break;
+
+                            CollisionResult cr = Mask.DistToMask(car.Mask);
+                            if (cr.distance.HasValue)
+                            {
+                                pushBack += cr.axisCol * cr.distance.Value * 0.3f;
+                            }
+                            break;
+                    }
                 }
             }
-
             #endregion
 
 
@@ -109,10 +116,14 @@ namespace LD48
             float lon = Vector2.Dot(lonDir, velocity);
             Vector2 latDir = GetLatDir();
             float lat = Vector2.Dot(latDir, velocity);
-            if (Math.Abs(lat) < 1f)
-                lat = 0f;
-            if (Math.Abs(lon) < 0.2f)
-                lon = 0f;
+
+            if (!(this is Friend))
+            {
+                if (Math.Abs(lat) < 1f)
+                    lat = 0f;
+                if (Math.Abs(lon) < 0.2f)
+                    lon = 0f;
+            }
 
             Vector2 lonV = lon * lonDir;
             Vector2 latV = lat * latDir;

@@ -49,7 +49,7 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 Friend();
-                yield return "you know..";
+                yield return "dude";
                 yield return "I tuned my car";
                 Swap();
                 yield return "again?";
@@ -61,6 +61,7 @@ namespace LD48
                 Swap();
                 yield return "It's much deeper to the ground now";
                 Swap();
+                yield return "?";
                 yield return "you lowered it?";
                 Swap();
                 yield return "yeaaah";

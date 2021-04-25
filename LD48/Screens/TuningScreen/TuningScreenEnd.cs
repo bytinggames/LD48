@@ -27,6 +27,7 @@ namespace LD48
         {
             yield return new UpdrawBlend(false);
             yield return new Dialogue1();
+            yield return new UpdrawDelay(60);
             yield return new UpdrawBlend(true);
         }
 
@@ -35,11 +36,10 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 Friend();
-                yield return "again...";
-                yield return "I lost";
+                yield return "I lost again...";
                 yield return "wow";
                 yield return "man I could have sworn you hit my car!";
-                yield return "I was so busy pushing, anything could have happened.";
+                yield return "I was so busy pushing, anything could have happened";
                 Swap();
                 yield return "nah";
                 Swap();

@@ -591,6 +591,7 @@ namespace LD48
             }
         }
 
+        static bool dialogue3Played = false;
 
         IEnumerable<Updraw> GetRaceEnumerable(int level)
         {
@@ -598,9 +599,10 @@ namespace LD48
             {
                 yield return new UpdrawBlend(false);
 
-                if (Ingame.instance.level == 3)
+                if (Ingame.instance.level == 3 && !dialogue3Played)
                 {
                     yield return new RaceDialogueLevel3();
+                    dialogue3Played = true;
                 }
 
 

@@ -97,11 +97,11 @@ namespace LD48
 
 
             //yield return new TuningScreenBefore1();
-            //foreach (var item in Level(level = 1)) yield return item;
-            //yield return new TuningScreenBefore2();
-            //foreach (var item in Level(level = 2)) yield return item;
-            //yield return new TuningScreenBefore3();
-            //foreach (var item in Level(level = 3)) yield return item;
+            foreach (var item in Level(level = 1)) yield return item;
+            yield return new TuningScreenBefore2();
+            foreach (var item in Level(level = 2)) yield return item;
+            yield return new TuningScreenBefore3();
+            foreach (var item in Level(level = 3)) yield return item;
             yield return new TuningScreenEnd();
         }
 
@@ -113,8 +113,9 @@ namespace LD48
                 yield return race = TrackFile.LoadTrack(level);
                 getOutCutscene = false;
                 if (race.won.Value)
+                {
                     break;
-                yield return new DialogueLost();
+                }
             }
         }
     }
