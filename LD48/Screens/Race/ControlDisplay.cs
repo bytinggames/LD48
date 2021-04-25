@@ -8,12 +8,14 @@ namespace LD48
 {
     class ControlDisplay : Updraw
     {
+        int frame = 0;
         public override void Draw(GameTime gameTime)
         {
         }
 
         public override bool Update(GameTime gameTime)
         {
+            frame++;
             if (Race.instance.player.movedByMyself && Race.instance.player.kickedByMyself)
                 return false;
             return true;
@@ -21,7 +23,12 @@ namespace LD48
 
         public override void DrawScreen()
         {
-            Textures.controls.Draw(Anchor.BottomRight(Race.instance.screenView.BottomRight));
+            Textures.controlsKeys.Draw(Anchor.BottomRight(Race.instance.screenView.BottomRight));
+
+            if (frame < 60* 10 || frame % 60 < 30)
+            {
+                Textures.controlsMouse.Draw(Anchor.BottomRight(Race.instance.screenView.BottomRight));
+            }
         }
     }
 }
