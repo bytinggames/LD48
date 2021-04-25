@@ -598,6 +598,11 @@ namespace LD48
             {
                 yield return new UpdrawBlend(false);
 
+                if (Ingame.instance.level == 3)
+                {
+                    yield return new RaceDialogueLevel3();
+                }
+
 
                 Sounds.engineStart.Play();
                 var engineSound = Sounds.engineLoop.SoundEffect.CreateInstance();
