@@ -26,12 +26,14 @@ namespace LD48
 
         protected override IEnumerable<Updraw> StateMachine()
         {
+            yield return new UpdrawBlend(false);
             yield return new Dialogue1();
             yield return new UpdrawLerp(150, f =>
             {
                 height = h - f;
             }, null);
             yield return new Dialogue2();
+            yield return new UpdrawBlend(true);
             // dialogue
         }
         class Dialogue1 : TuningDialogue

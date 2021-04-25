@@ -320,9 +320,15 @@ namespace LD48
             }
             #endregion
 
+
             camera.targetPos = player.Pos;
 
             camera.UpdateEnd(G.ResX, G.ResY);
+
+#if DEBUG
+            if (Input.f.pressed)
+                Win();
+#endif
 
             return true;
         }
@@ -633,7 +639,7 @@ namespace LD48
 
             player.blockInput = false;
 
-            yield return new ControlDisplay();
+            yield return new ControlDisplay(() => !won.HasValue);
         }
     }
 }

@@ -26,6 +26,8 @@ namespace LD48
 
         protected override IEnumerable<Updraw> StateMachine()
         {
+            yield return new UpdrawBlend(false);
+            yield return new UpdrawDelay(60);
             yield return new Dialogue1();
             yield return new UpdrawLerp(100, f =>
             {
@@ -37,6 +39,7 @@ namespace LD48
                 height = h - 1f / 2f - f * 1f / 2f;
             }, null);
             yield return new Dialogue3();
+            yield return new UpdrawBlend(true);
         }
 
         class Dialogue1 : TuningDialogue
@@ -44,35 +47,70 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 Friend();
-                yield return "Dialogue1";
-                // [dudes are chilling]
-                // "I deepened my car"
-                // "you mean lowering?"
-                // ".. yup, much better now, you should do it too"
-                // why?
-                // "theres this event..."
-                // ok
+                yield return "You know..";
+                yield return "I tuned my car";
+                Swap();
+                yield return "Again?";
+                Swap();
+                yield return "Yup!";
+                yield return "It's much faster now";
+                Swap();
+                yield return "What did you change?";
+                Swap();
+                yield return "It's much deeper to the ground now";
+                Swap();
+                yield return "You lowered it?";
+                Swap();
+                yield return "Yeaaah";
+                yield return "heard lowering the mass of a car improves it's grip";
+                yield return "you know...";
+                yield return "physics!";
+                Swap();
+                yield return "sure";
+                Swap();
+                yield return "tomorrow I'm gonna test it out in a street race";
+                yield return "you in?";
+                Swap();
+                yield return "naah.. have family";
+                yield return "can't do that anymore";
+                Swap();
+                yield return "maan, but it will be awesome!";
+                yield return "there's a big price money";
+                Swap();
+                yield return "ok";
+                yield return "but my car...";
+                yield return "I only have this family car now";
+                Swap();
+                yield return "just lower it too";
+                Swap();
+                yield return "ok";
             }
         }
         class Dialogue2 : TuningDialogue
         {
             protected override IEnumerable<string> GetDialogue()
             {
-                yield return "Dialogue2";
-                // "das nennst du lowern?"
+                Friend();
+                yield return "that all you got?";
+                Swap();
+                yield return "...";
             }
         }
         class Dialogue3 : TuningDialogue
         {
             protected override IEnumerable<string> GetDialogue()
             {
-                yield return "Dialogue3";
-                // "cool"
-                // "yeah"
-                // "so about the tournament 4 dudes, last place looses. it's on the street"
-                // "but I have family, can't do that anymore"
-                // "but it's so cool, and you know I'm getting nervous when being alone on the track"
-                // "ok"
+                Friend();
+                yield return "...";
+                yield return "cool";
+                Swap();
+                yield return "yeah";
+                Swap();
+                yield return "so about the tournament:";
+                yield return "4 dudes";
+                yield return "last is eliminated each round";
+                Swap();
+                yield return "sure";
             }
         }
     }

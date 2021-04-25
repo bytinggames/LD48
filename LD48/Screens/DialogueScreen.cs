@@ -75,7 +75,7 @@ namespace LD48
         //{
         //    Fonts.big.Draw(dialogue.Current, Anchor.Center(G.Res / 8f), currentVoice == Voice.Player ? Color.White : currentVoice == Voice.Friend ? Color.Purple : Color.Red);
         //}
-
+        protected void Swap() => currentVoice = currentVoice == Voice.Friend ? Voice.Player : Voice.Friend;
         protected void Friend() => currentVoice = Voice.Friend;
         protected void Player() => currentVoice = Voice.Player;
     }

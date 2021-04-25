@@ -8,6 +8,12 @@ namespace LD48
 {
     class ControlDisplay : Updraw
     {
+        Func<bool> doWhile;
+        public ControlDisplay(Func<bool> doWhile)
+        {
+            this.doWhile = doWhile;
+        }
+
         int frame = 0;
         public override void Draw(GameTime gameTime)
         {
@@ -16,6 +22,8 @@ namespace LD48
         public override bool Update(GameTime gameTime)
         {
             frame++;
+            if (!doWhile())
+                return false;
             if (Race.instance.player.movedByMyself && Race.instance.player.kickedByMyself)
                 return false;
             return true;
