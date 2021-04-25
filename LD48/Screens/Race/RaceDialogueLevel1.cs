@@ -8,7 +8,7 @@ namespace LD48
 {
     class RaceDialogueLevel1 : RaceDialogue
     {
-        public RaceDialogueLevel1() : base(Race.instance.screenView)
+        public RaceDialogueLevel1() : base()
         {
         }
 

@@ -101,6 +101,8 @@ namespace LD48
             }
             for (int i = 0; i < iterations; i++)
             {
+                if (i > 0)
+                    Input.Update();
                 if (!ingame.Update(gameTime))
                 {
                     Exit();

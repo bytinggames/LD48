@@ -39,7 +39,8 @@ namespace LD48
 
         public DialogueBox(M_Rectangle viewInScreenSpace, string text, Color? color = null)
         {
-            this.viewInScreenSpace = viewInScreenSpace;
+            this.viewInScreenSpace = viewInScreenSpace.CloneRectangle();
+            this.viewInScreenSpace.Enlarge(-8f);
             this.color = color ?? Color.White;
 
             Vector2 textSize = CropText(text);

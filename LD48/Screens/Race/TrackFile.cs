@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JuliHelper;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,8 @@ namespace LD48
     static class TrackFile
     {
         static string GetFilePath(int index) => string.Format(Paths.level, index);
+        static string GetFilePathBackup(int index) => 
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LD48", "level-backups", "level_" + index + "_" + DateTime.Now.ToFileTimeUtc());
 
         static int loadedIndex = 0;
 
@@ -38,6 +41,16 @@ namespace LD48
         public static void SaveTrack(Race race)
         {
             using (FileStream fs = File.Create(GetFilePath(loadedIndex)))
+            {
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    bw.Write(race);
+                }
+            }
+            string dir = Path.GetDirectoryName(GetFilePathBackup(loadedIndex));
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            using (FileStream fs = File.Create(GetFilePathBackup(loadedIndex)))
             {
                 using (BinaryWriter bw = new BinaryWriter(fs))
                 {

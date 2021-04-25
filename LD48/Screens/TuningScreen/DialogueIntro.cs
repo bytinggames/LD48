@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LD48
 {
-    class DialogueIntro : DialogueScreen
+    class DialogueIntro : TuningDialogue
     {
         protected override IEnumerable<string> GetDialogue()
         {

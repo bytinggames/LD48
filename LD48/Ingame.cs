@@ -17,6 +17,9 @@ namespace LD48
         public static Ingame instance;
 
         public int level = 0;
+        public bool getOutCutscene = true;
+
+        public bool editor = false;
 
         public Ingame(SpriteBatch spriteBatch, GraphicsDevice gDevice)
         {
@@ -66,6 +69,12 @@ namespace LD48
 
         public IEnumerable<Updraw> WholeGame()
         {
+            if (editor)
+            {
+                getOutCutscene = false;
+                yield return TrackFile.LoadTrack(1);
+                yield break;
+            }
             //int w = 100;
             //int h = 100;d
 
@@ -75,13 +84,13 @@ namespace LD48
             //};
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
-            //yield return new DialogueIntro();
+            //yield return new TuningScreen1();
             foreach (var item in Level(++level)) yield return item;
-            yield return new DialogueIntro();
+            yield return new TuningScreen1();
             foreach (var item in Level(++level)) yield return item;
-            yield return new DialogueIntro();
+            yield return new TuningScreen1();
             foreach (var item in Level(++level)) yield return item;
-            yield return new DialogueIntro();
+            yield return new TuningScreen1();
         }
 
         IEnumerable<Updraw> Level(int level)
@@ -90,6 +99,7 @@ namespace LD48
             while (true)
             {
                 yield return race = TrackFile.LoadTrack(level);
+                getOutCutscene = false;
                 if (race.won.Value)
                     break;
                 yield return new DialogueLost();

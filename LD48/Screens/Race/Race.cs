@@ -150,6 +150,9 @@ namespace LD48
         {
             camera.UpdateBegin();
 
+            if (!gameState.Update(gameTime))
+                return false;
+
             if (!pauseGame)
             {
                 for (int i = 0; i < Entities.Count; i++)
@@ -316,9 +319,6 @@ namespace LD48
 
             }
             #endregion
-
-            if (!gameState.Update(gameTime))
-                return false;
 
             camera.targetPos = player.Pos;
 
@@ -574,24 +574,66 @@ namespace LD48
 
         IEnumerable<Updraw> GetRaceEnumerable(int level)
         {
-            if (level == 1)
+            if (!Ingame.instance.editor)
             {
                 yield return new UpdrawBlend(false);
                 // Before Traffic Lights
                 // Traffic Lights
                 yield return new UpdrawTrafficLights(() => pauseGame = false, level);
-                // Cars dont work
-                yield return new UpdrawDelay(60 * 3);
-                yield return new RaceDialogueLevel1();
-                // Talk
-                // Get out
-            }
 
-            // Game
+                if (Ingame.instance.getOutCutscene)
+                {
+                    foreach (var item in GetOutCutscene()) yield return item;
+                }
+
+                // Game
+                player.blockInput = false;
+                player.enabled = true;
+                friend.enabled = true;
+                yield return new UpdrawWhile(() => !won.HasValue);
+                yield return new UpdrawBlend(true);
+            }
+            else
+            {
+                player.blockInput = false;
+                player.enabled = true;
+                yield return new UpdrawWhile(() => true);
+            }
+        }
+
+        IEnumerable<Updraw> GetOutCutscene()
+        {
+            // Cars dont work
+            yield return new UpdrawDelay(60 * 3);
+            yield return new RaceDialogueLevel1();
+            // Talk
+            // Get out
             player.enabled = true;
             friend.enabled = true;
-            yield return new UpdrawWhile(() => !won.HasValue);
-            yield return new UpdrawBlend(true);
+            player.PosX--;
+
+            yield return new UpdrawDelay(30);
+            yield return new UpdrawDo(23, () =>
+            {
+                player.moveInput = new Vector2(0f, 1f);
+            });
+            yield return new UpdrawDelay(1);
+            yield return new UpdrawDo(13, () =>
+            {
+                player.moveInput = new Vector2(1f, 0f);
+            });
+            yield return new UpdrawDelay(10);
+
+            PlayerCar myCar = Race.instance.Entities.Find(f => f is PlayerCar) as PlayerCar;
+            yield return new UpdrawDo(300, () =>
+            {
+                player.moveInput = (myCar.Pos - player.Pos);
+                //moveInput = new Vector2(0f, -1f);
+            });
+
+            player.blockInput = false;
+
+            yield return new ControlDisplay();
         }
     }
 }

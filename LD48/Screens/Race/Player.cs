@@ -23,6 +23,10 @@ namespace LD48
 
         public bool enabled = false;
 
+        public bool blockInput = true;
+        public Vector2 moveInput;
+        public bool movedByMyself, kickedByMyself;
+
         public override object[] GetConstructorValues() => new object[] { Pos };
 
         public Player(Vector2 pos) : base(Textures.player, new M_Circle(pos, radius))
@@ -64,24 +68,34 @@ namespace LD48
                 keys[i].Update();
             }
 
+            if (!blockInput)
+            {
+                if (right.down)
+                    moveInput.X++;
+                if (left.down)
+                    moveInput.X--;
+                if (up.down)
+                    moveInput.Y--;
+                if (down.down)
+                    moveInput.Y++;
+            }
+
             Vector2 distToMouse = Race.instance.camera.mousePos - Pos;
             orientation = (float)Math.Atan2(distToMouse.Y, distToMouse.X);
             orientationDir = Vector2.Normalize(distToMouse);
 
-            Vector2 move = Vector2.Zero;
-            if (right.down)
-                move.X++;
-            if (left.down)
-                move.X--;
-            if (up.down)
-                move.Y--;
-            if (down.down)
-                move.Y++;
 
-            if (move != Vector2.Zero)
+            Vector2 move = Vector2.Zero;
+
+            if (moveInput != Vector2.Zero)
             {
-                move.Normalize();
+                moveInput.Normalize();
+                move = moveInput;
+                moveInput = Vector2.Zero;
                 move *= moveSpeed;
+
+                if (!blockInput)
+                    movedByMyself = true;
             }
 
             #region Push out of half-solids
@@ -119,18 +133,22 @@ namespace LD48
 
             UpdateKickVertices();
 
-            if (Input.mbLeft.pressed)
+            if (!blockInput)
             {
-                foreach (var e in Race.instance.Entities)
+                if (Input.mbLeft.pressed)
                 {
-                    switch (e)
+                    foreach (var e in Race.instance.Entities)
                     {
-                        case Car car:
-                            if (kickMask.ColMask(car.Mask))
-                            {
-                                car.ApplyForce(Pos, orientationDir, 10f);
-                            }
-                            break;
+                        switch (e)
+                        {
+                            case Car car:
+                                if (kickMask.ColMask(car.Mask))
+                                {
+                                    car.ApplyForce(Pos, orientationDir, 10f);
+                                    kickedByMyself = true;
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -148,8 +166,11 @@ namespace LD48
 
         public override void DrawOverlay(GameTime gameTime)
         {
-            if (Input.mbLeft.down)
-                kickMask.Draw(G.SpriteBatch, Color.Black * 0.5f);
+            if (!blockInput)
+            {
+                if (Input.mbLeft.down)
+                    kickMask.Draw(G.SpriteBatch, Color.Black * 0.5f);
+            }
         }
     }
 

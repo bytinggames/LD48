@@ -44,8 +44,6 @@ namespace LD48
             dialogue = GetDialogue().GetEnumerator();
             dialogue.MoveNext();
             box = new DialogueBox(screenView, dialogue.Current);
-
-            Drawer.roundPositionTo = 0.25f;
         }
 
         public override bool Update(GameTime gameTime)
@@ -64,6 +62,7 @@ namespace LD48
 
         public override void Draw(GameTime gameTime)
         {
+            Drawer.roundPositionTo = 0.25f;
             G.GDevice.Clear(Color.Black);
             G.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: screenMatrix);
 
