@@ -7,9 +7,9 @@ using System.Text;
 
 namespace LD48
 {
-    class TuningScreen1 : TuningScreen
+    class TuningScreenEnd : TuningScreen
     {
-        public TuningScreen1() : base(1f)
+        public TuningScreenEnd() : base(-2f)
         {
         }
 
@@ -25,13 +25,15 @@ namespace LD48
 
         protected override IEnumerable<Updraw> StateMachine()
         {
-            yield return new DialogueIntro();
-            yield return new UpdrawLerp(150, f =>
+            yield return new Dialogue1();
+        }
+
+        class Dialogue1 : TuningDialogue
+        {
+            protected override IEnumerable<string> GetDialogue()
             {
-                height = 1f - f;
-            }, null);
-            yield return new DialogueIntro();
-            // dialogue
+                throw new NotImplementedException();
+            }
         }
     }
 }

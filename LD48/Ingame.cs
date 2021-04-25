@@ -84,13 +84,13 @@ namespace LD48
             //};
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
-            //yield return new TuningScreen1();
-            //foreach (var item in Level(level = 1)) yield return item;
-            //yield return new TuningScreen1();
-            //foreach (var item in Level(level = 2)) yield return item;
-            //yield return new TuningScreen1();
+            yield return new TuningScreenBefore1();
+            foreach (var item in Level(level = 1)) yield return item;
+            yield return new TuningScreenBefore2();
+            foreach (var item in Level(level = 2)) yield return item;
+            yield return new TuningScreenBefore3();
             foreach (var item in Level(level = 3)) yield return item;
-            yield return new TuningScreen1();
+            yield return new TuningScreenEnd();
         }
 
         IEnumerable<Updraw> Level(int level)
