@@ -93,7 +93,7 @@ namespace LD48
 #if DEBUG
             camera.zoomControl = true;
 #endif
-            camera.zoom = camera.targetZoom = 4f;
+            camera.zoom = camera.targetZoom = G.ResY / 1080f  * 4f;
             camera.targetPos = player.Pos;
             camera.JumpToTarget();
 

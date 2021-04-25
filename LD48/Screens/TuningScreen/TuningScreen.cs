@@ -12,7 +12,7 @@ namespace LD48
         public static TuningScreen instance;
 
         public M_Rectangle screenView;
-        public Matrix screenMatrix = Matrix.CreateScale(4f);
+        public Matrix screenMatrix;
         public Matrix screenMatrixInverse;
 
         protected float height;
@@ -36,6 +36,7 @@ namespace LD48
 
             this.height = height;
             screenView = new M_Rectangle(0, 0, G.ResX, G.ResY);
+            screenMatrix = Matrix.CreateScale(G.ResY / 1080f * 4f);
             screenMatrixInverse = Matrix.Invert(screenMatrix);
             screenView.Transform(screenMatrixInverse);
 

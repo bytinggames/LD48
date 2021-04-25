@@ -102,7 +102,7 @@ namespace LD48
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
 
-            //yield return new TuningScreenBefore1();
+            yield return new TuningScreenBefore1();
             foreach (var item in Level(level = 1)) yield return item;
             yield return new TuningScreenBefore2();
             foreach (var item in Level(level = 2)) yield return item;
