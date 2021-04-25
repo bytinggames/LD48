@@ -19,7 +19,7 @@ namespace LD48
             {
                 case 1: return 0.05f;
                 case 2: return 0.1f;
-                default: return 0.2f;
+                default: return 0.15f;
             }
         }
 

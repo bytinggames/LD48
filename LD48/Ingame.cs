@@ -19,7 +19,7 @@ namespace LD48
         public int level = 0;
         public bool getOutCutscene = true;
 
-        public bool editor = false;
+        public int editorLevel = 0;
 
         public Ingame(SpriteBatch spriteBatch, GraphicsDevice gDevice)
         {
@@ -69,10 +69,10 @@ namespace LD48
 
         public IEnumerable<Updraw> WholeGame()
         {
-            if (editor)
+            if (editorLevel > 0)
             {
                 getOutCutscene = false;
-                yield return TrackFile.LoadTrack(1);
+                yield return TrackFile.LoadTrack(editorLevel);
                 yield break;
             }
             //int w = 100;
@@ -85,11 +85,11 @@ namespace LD48
             //entities.Add(new House(new M_Rectangle(10, 10, 100, 100)));
 
             //yield return new TuningScreen1();
-            foreach (var item in Level(++level)) yield return item;
-            yield return new TuningScreen1();
-            foreach (var item in Level(++level)) yield return item;
-            yield return new TuningScreen1();
-            foreach (var item in Level(++level)) yield return item;
+            //foreach (var item in Level(level = 1)) yield return item;
+            //yield return new TuningScreen1();
+            //foreach (var item in Level(level = 2)) yield return item;
+            //yield return new TuningScreen1();
+            foreach (var item in Level(level = 3)) yield return item;
             yield return new TuningScreen1();
         }
 

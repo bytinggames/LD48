@@ -574,14 +574,14 @@ namespace LD48
 
         IEnumerable<Updraw> GetRaceEnumerable(int level)
         {
-            if (!Ingame.instance.editor)
+            if (Ingame.instance.editorLevel <= 0)
             {
                 yield return new UpdrawBlend(false);
                 // Before Traffic Lights
                 // Traffic Lights
                 yield return new UpdrawTrafficLights(() => pauseGame = false, level);
 
-                if (Ingame.instance.getOutCutscene)
+                if (Ingame.instance.getOutCutscene && Ingame.instance.level == 1)
                 {
                     foreach (var item in GetOutCutscene()) yield return item;
                 }
