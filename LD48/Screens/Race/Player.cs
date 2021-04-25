@@ -13,7 +13,7 @@ namespace LD48
         List<KeyCollection> keys = new List<KeyCollection>();
 
         const float radius = 7f;
-        const float kickRadius = 24;
+        const float kickRadius = 16;
 
         M_Polygon kickMask;
         float orientation;
@@ -26,6 +26,11 @@ namespace LD48
         public bool blockInput = true;
         public Vector2 moveInput;
         public bool movedByMyself, kickedByMyself;
+
+        float walkFrame;
+        const float walkFrameSpeed = 0.1f;
+        bool pushing = false;
+        float drawOrientation = MathHelper.Pi;
 
         public override object[] GetConstructorValues() => new object[] { Pos };
 
@@ -59,6 +64,7 @@ namespace LD48
         }
 
         bool colLastFrame;
+        Vector2 lastMoveInput;
 
         public override void Update(GameTime gameTime)
         {
@@ -91,19 +97,30 @@ namespace LD48
 
             if (moveInput != Vector2.Zero)
             {
+                drawOrientation = (float)Math.Atan2(moveInput.Y, moveInput.X);
+
                 moveInput.Normalize();
                 move = moveInput;
+                lastMoveInput = moveInput;
                 moveInput = Vector2.Zero;
                 move *= moveSpeed;
 
                 if (!blockInput)
                     movedByMyself = true;
+
+                walkFrame += walkFrameSpeed;
+                if (walkFrame > 4f)
+                    walkFrame -= 4f;
+
             }
+            else
+                walkFrame = 0;
 
             #region Push out of half-solids
 
             Vector2 pushBack = Vector2.Zero;
 
+            pushing = false;
             foreach (var e in Race.instance.Entities)
             {
                 switch (e)
@@ -114,7 +131,13 @@ namespace LD48
                         {
                             pushBack += cr.axisCol * cr.distance.Value * 0.3f;
                             if (move != Vector2.Zero)
-                                car.ApplyForce(Pos, move, 0.1f);
+                            {
+                                if (Vector2.Dot(move, cr.axisCol) < 0)
+                                {
+                                    car.ApplyForce(Pos, move, 0.1f);
+                                    pushing = true;
+                                }
+                            }
                         }
                         break;
                 }
@@ -179,17 +202,33 @@ namespace LD48
         {
             if (!enabled)
                 return;
-            DrawMask();
-            base.Draw(gameTime);
+
+            //DrawMask();
+
+            int frame;
+            if (Input.mbLeft.down && !blockInput)
+            {
+                frame = 5;
+                drawOrientation = orientation;
+            }
+            else if (pushing)
+                frame = 4;
+            else
+                frame = (int)walkFrame;
+
+            Depth.humans.Set(() =>
+            {
+                Texture.Draw(Anchor.Center(Pos), null, new Rectangle(frame * Texture.Height, 0, Texture.Height, Texture.Height), null, drawOrientation);
+            });
         }
 
         public override void DrawOverlay(GameTime gameTime)
         {
-            if (!blockInput)
-            {
-                if (Input.mbLeft.down)
-                    kickMask.Draw(G.SpriteBatch, Color.Black * 0.5f);
-            }
+            //if (!blockInput)
+            //{
+            //    if (Input.mbLeft.down)
+            //        kickMask.Draw(G.SpriteBatch, Color.Black * 0.5f);
+            //}
         }
     }
 

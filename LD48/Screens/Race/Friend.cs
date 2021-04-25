@@ -61,7 +61,10 @@ namespace LD48
                 playerTexOrientation += (targetOrientation - playerTexOrientation) * 0.5f;
                 Vector2 dir = new Vector2((float)Math.Cos(playerTexOrientation), (float)Math.Sin(playerTexOrientation));
 
-                Textures.friend.Draw(Anchor.Center(Pos + -dir * (Textures.car1Color.Width / 2f + Textures.friend.Width / 2f)), null, null, null, playerTexOrientation);
+                Depth.humans.Set(() =>
+                {
+                    Textures.friend.Draw(Anchor.Center(Pos + -dir * (Textures.car1Color.Width / 2f + Textures.friend.Width / 2f - 3f)), null, null, null, playerTexOrientation);
+                });
             }
             base.Draw(gameTime);
         }
