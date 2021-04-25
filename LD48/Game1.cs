@@ -77,39 +77,41 @@ namespace LD48
         {
             Input.Update();
 
-            if (Input.esc.pressed)
+            if (IsActive)
             {
-                Exit();
-                return;
-            }
-            if (Input.leftControl.down && Input.r.pressed)
-            {
-                ingame.Dispose();
-                NewIngame();
-            }
-
-            windowHelper.UpdateBasicInputFunctions();
-
-            int iterations = 1;
-            if (Input.leftShift.down)
-                iterations = 10;
-            if (Input.rightControl.down)
-            {
-                iterations = 0;
-                if (Input.rightAlt.pressed)
-                    iterations = 1;
-            }
-            for (int i = 0; i < iterations; i++)
-            {
-                if (i > 0)
-                    Input.Update();
-                if (!ingame.Update(gameTime))
+                if (Input.esc.pressed)
                 {
                     Exit();
                     return;
                 }
-            }
+                if (Input.leftControl.down && Input.r.pressed)
+                {
+                    ingame.Dispose();
+                    NewIngame();
+                }
 
+                windowHelper.UpdateBasicInputFunctions();
+
+                int iterations = 1;
+                if (Input.leftShift.down)
+                    iterations = 10;
+                if (Input.rightControl.down)
+                {
+                    iterations = 0;
+                    if (Input.rightAlt.pressed)
+                        iterations = 1;
+                }
+                for (int i = 0; i < iterations; i++)
+                {
+                    if (i > 0)
+                        Input.Update();
+                    if (!ingame.Update(gameTime))
+                    {
+                        Exit();
+                        return;
+                    }
+                }
+            }
             base.Update(gameTime);
         }
 
