@@ -25,9 +25,11 @@ namespace LD48
 
         SoundEffectInstance slideSound;
 
+        protected Color carColor;
+
         public override object[] GetConstructorValues() => new object[] { Pos, orientation };
 
-        public Car(Vector2 pos, float orientation) : base(Textures.car, new M_Rectangle(0, 0, Textures.car.Width, Textures.car.Height).ToPolygon())
+        public Car(Vector2 pos, float orientation) : base(Textures.car1Color, new M_Rectangle(0, 0, Textures.car1Color.Width, Textures.car1Color.Height - 4).ToPolygon())
         {
             Pos = pos;
             this.orientation = orientation;
@@ -37,6 +39,8 @@ namespace LD48
                 poly.vertices[i] -= Texture.GetSize() / 2f;
             }
             baseVertices = poly.vertices.ToList();
+
+            carColor = G.Rand.NextColor();
 
             UpdateMask();
         }
@@ -166,7 +170,8 @@ namespace LD48
 
         public override void Draw(GameTime gameTime)
         {
-            Texture.Draw(Anchor.Center(Pos), null, null, null, orientation);
+            Textures.car1NoColor.Draw(Anchor.Center(Pos), null, null, null, orientation);
+            Texture.Draw(Anchor.Center(Pos), carColor, null, null, orientation);
         }
 
         internal void ApplyForce(Vector2 fromPosition, Vector2 inDirection, float force)

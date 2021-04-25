@@ -94,10 +94,10 @@ namespace LD48
                 case Voice.Unknown:
                     break;
                 case Voice.Player:
-                    textColor = new Color(0,200,0);
+                    textColor = Colors.player;
                     break;
                 case Voice.Friend:
-                    textColor = new Color(128, 0, 255);
+                    textColor = Colors.friend;
                     break;
                 default:
                     break;

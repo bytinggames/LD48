@@ -23,6 +23,11 @@ namespace LD48
         {
             this.path = path;
             this.botID = botID;
+
+            if (botID != 0)
+            {
+                carColor = Colors.botColors[botID - 1];
+            }
         }
 
         public override void Update(GameTime gameTime)

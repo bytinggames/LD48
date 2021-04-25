@@ -11,7 +11,7 @@ namespace LD48
 {
     public static class Textures
     {
-        public static Texture2D player, car, floor, friend, goal, trafficLight, controlsMouse, controlsKeys, wheel, carBody, playerBig, friendBig;
+        public static Texture2D player, car1Color, car1NoColor, floor, friend, goal, trafficLight, controlsMouse, controlsKeys, wheel, carBody, playerBig, friendBig;
 
         public static void LoadContent(GraphicsDevice gDevice, string contentPath)
         {

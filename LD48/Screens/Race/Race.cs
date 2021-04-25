@@ -667,7 +667,7 @@ namespace LD48
             // Get out
             player.enabled = true;
             friend.enabled = true;
-            player.PosX--;
+            player.PosX -= 3;
 
             yield return new UpdrawDelay(30);
             yield return new UpdrawDo(23, () =>

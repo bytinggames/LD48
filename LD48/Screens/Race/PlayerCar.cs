@@ -12,6 +12,8 @@ namespace LD48
         public PlayerCar(Vector2 pos, float orientation) : base(pos, orientation)
         {
             InitLowered();
+
+            carColor = Colors.player;
         }
 
         public override void Update(GameTime gameTime)
