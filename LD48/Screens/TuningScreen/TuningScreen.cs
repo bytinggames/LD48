@@ -26,7 +26,7 @@ namespace LD48
         public Vector2 friendSpeechPos => friendPos - new Vector2(0, Textures.friendBig.Height);
 
 
-        public TuningScreen(float height)
+        public TuningScreen(float height, int index)
         {
             if (instance != null)
                 throw new Exception();
@@ -41,6 +41,7 @@ namespace LD48
 
             playerPos = screenView.BottomLeft + new Vector2(200, 0);
             friendPos = screenView.BottomLeft + new Vector2(350, 0);
+            friendPos.X -= index * 25f;
         }
 
         public override void Draw(GameTime gameTime)

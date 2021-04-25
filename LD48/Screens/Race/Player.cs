@@ -12,7 +12,7 @@ namespace LD48
         KeyCollection right, up, left, down;
         List<KeyCollection> keys = new List<KeyCollection>();
 
-        const float radius = 8f;
+        const float radius = 7f;
         const float kickRadius = 24;
 
         M_Polygon kickMask;

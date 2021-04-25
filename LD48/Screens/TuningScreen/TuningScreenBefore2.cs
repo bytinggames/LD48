@@ -10,7 +10,7 @@ namespace LD48
     class TuningScreenBefore2 : TuningScreen
     {
         const float h = 0f;
-        public TuningScreenBefore2() : base(h)
+        public TuningScreenBefore2() : base(h, 1)
         {
         }
 
@@ -38,6 +38,18 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 throw new NotImplementedException();
+                // "man that was awesome"
+                // "but you lost"
+                // "..."
+                // "don't worry, I'm still in the game, the winner [died of an Unfall / vllt iwas subtileres]"
+                // "you want to continue?"
+                // "klar, hab PS meines AUtos getuned"
+                // "I need the money for the children"
+                // "then lower it"
+                // "not possible"
+                // "yeah let me show me how"
+                // [cuts car in half]
+                // [lowers]
             }
         }
         class Dialogue2 : TuningDialogue
@@ -45,6 +57,7 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 throw new NotImplementedException();
+                // "dope"
             }
         }
     }

@@ -10,7 +10,7 @@ namespace LD48
     class TuningScreenBefore3 : TuningScreen
     {
         const float h = -1f;
-        public TuningScreenBefore3() : base(h)
+        public TuningScreenBefore3() : base(h, 2)
         {
         }
 
@@ -39,6 +39,12 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 throw new NotImplementedException();
+                // verzweifelt
+                // man chill
+                // nee!
+                // you have to win!
+                // there's only one way... going deeper, losing weight!
+                // ok
             }
         }
         class Dialogue2 : TuningDialogue
@@ -46,6 +52,7 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 throw new NotImplementedException();
+                // good luck
             }
         }
     }

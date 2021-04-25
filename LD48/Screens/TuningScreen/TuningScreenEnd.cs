@@ -9,7 +9,7 @@ namespace LD48
 {
     class TuningScreenEnd : TuningScreen
     {
-        public TuningScreenEnd() : base(-2f)
+        public TuningScreenEnd() : base(-2f, 3)
         {
         }
 
@@ -33,6 +33,9 @@ namespace LD48
             protected override IEnumerable<string> GetDialogue()
             {
                 throw new NotImplementedException();
+                // is pissed
+                // why did you fall for my trap [subtiler]
+                // 
             }
         }
     }
