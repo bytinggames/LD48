@@ -1,5 +1,6 @@
 ﻿using JuliHelper;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace LD48
 
         public int editorLevel = 0;
 
+        SoundEffectInstance music;
+
         public Ingame(SpriteBatch spriteBatch, GraphicsDevice gDevice)
         {
             if (instance != null)
@@ -31,6 +34,11 @@ namespace LD48
             this.gDevice = gDevice;
 
             screen = new UpdrawEnumerator(WholeGame());
+
+            music = Music.dialogueMusic.CreateInstance();
+            music.IsLooped = true;
+            music.Volume = 0.3f;
+            music.Play();
         }
         public bool Update(GameTime gameTime)
         {
@@ -64,6 +72,9 @@ namespace LD48
         public void Dispose()
         {
             screen.Current?.Dispose();
+
+            music.Dispose();
+
             instance = null;
         }
 

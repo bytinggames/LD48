@@ -34,6 +34,7 @@ namespace LD48
             Textures.LoadContent(gDevice, contentPath);
             Fonts.LoadContent(content);
             Sounds.LoadContent(contentPath);
+            Music.LoadContent(content);
             DepthManager.Initialize(typeof(Depth));
             Paths.Initialize(contentPath);
         }

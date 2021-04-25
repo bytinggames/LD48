@@ -25,3 +25,9 @@
 #begin Fonts/small.xnb
 /copy:Fonts/small.xnb
 
+#begin Music/dialogueMusic.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Music/dialogueMusic.ogg
+
