@@ -12,13 +12,15 @@ namespace LD48
 {
     public static class Sounds
     {
-        public static SoundItem knock, knock2, knock3;
+        public static SoundItem textPlop, collision, carSlideOverGroundLoop, horn123, hornGo, transition, carDriveAway, loose, win, ripCar, clickTextBox
+            , fastForwardTextbox, kickAir, moveRippedCarPart, lowerCar, engineStart, engineLoop;
+        public static SoundItemCollection steps, kickCar;
 
         public static void LoadContent(string contentPath)
         {
             ContentFenja.LoadRaw(typeof(Sounds), contentPath, "Sounds", null);
 
-            knock2.Pitch = 1f;
+            textPlop.Volume /= 2f;
         }
 
         public static void Dispose()

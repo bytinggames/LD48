@@ -197,12 +197,15 @@ namespace LD48
 
             if (currentLine < lines.Count)
             {
+                float last = currentChar;
                 currentChar += textSpeed;
                 if (currentChar >= lines[currentLine].Length)
                 {
                     currentChar = 0;
                     currentLine++;
                 }
+                else if ((int)currentChar > (int)last && lines[currentLine][(int)currentChar] != ' ')
+                    Sounds.textPlop.Play();
             }
             return true;
         }

@@ -40,7 +40,7 @@ namespace LD48
             });
             yield return new UpdrawDelay(30);
 
-            yield return new UpdrawLerp(150, f =>
+            yield return new UpdrawLerp(100, f =>
             {
                 height = h - f;
             });
