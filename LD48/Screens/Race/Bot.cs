@@ -36,8 +36,14 @@ namespace LD48
                     velocity += Vector2.Normalize(dist) * GetSpeed();
 
                     float targetOrientation = (float)Math.Atan2(dist.Y, dist.X);
-                    float angleDist = Calculate.AngleDistance(orientation, targetOrientation);
-                    orientationVelocity = angleDist * GetSpeed() * 0.1f;////Math.Sign(angleDist) * Math.Max(0.1f, angleDist;
+                    float angleDist = Calculate.AngleDistance(orientation + orientationVelocity * 10f, targetOrientation);
+
+                    float maxSteer = GetSpeed() * 0.1f;
+
+                    if (Math.Abs(angleDist) > maxSteer)
+                        angleDist = Math.Sign(angleDist) * maxSteer;
+
+                    orientationVelocity += (angleDist - orientationVelocity) * 0.1f;// (angleDist - orientationVelocity) * 0.5f;////Math.Sign(angleDist) * Math.Max(0.1f, angleDist;
                 }
             }
             base.Update(gameTime);

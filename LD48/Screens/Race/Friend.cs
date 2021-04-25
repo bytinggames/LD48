@@ -53,8 +53,8 @@ namespace LD48
         {
             if (enabled)
             {
-                float o = orientation + orientationVelocity * 5f;
-                playerTexOrientation += (o - playerTexOrientation) * 0.5f;
+                float targetOrientation = orientation + orientationVelocity * 5f;
+                playerTexOrientation += (targetOrientation - playerTexOrientation) * 0.5f;
                 Vector2 dir = new Vector2((float)Math.Cos(playerTexOrientation), (float)Math.Sin(playerTexOrientation));
 
                 Textures.friend.Draw(Anchor.Center(Pos + -dir * (Textures.car.Width / 2f + Textures.friend.Width / 2f)), null, null, null, playerTexOrientation);
