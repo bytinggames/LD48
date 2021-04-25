@@ -43,8 +43,9 @@ namespace LD48
             Mask.Draw(G.SpriteBatch, Color.Black * 0.5f, Depth.maskDebug);
         }
 
-        public void Move(Vector2 move)
+        public bool Move(Vector2 move)
         {
+            bool anyCollision = false;
 
             float t = 1f;
             int c = 0;
@@ -100,6 +101,7 @@ namespace LD48
                 }
                 else
                 {
+                    anyCollision = true;
                     float dist = crTotal.distance.Value;
                     Vector2 axisCol = crTotal.axisCol;
 
@@ -110,6 +112,7 @@ namespace LD48
                 }
                 c++;
             }
+            return anyCollision;
         }
     }
 }

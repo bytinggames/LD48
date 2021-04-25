@@ -9,7 +9,7 @@ using System.Text;
 
 namespace LD48
 {
-    abstract class Entity : IStorable
+    abstract class Entity : IStorable, IDisposable
     {
         public virtual Vector2 Pos { get; set; }
         public virtual float PosX { get; set; }
@@ -38,6 +38,10 @@ namespace LD48
         }
 
         public void GetStoreVariables()
+        {
+        }
+
+        public virtual void Dispose()
         {
         }
     }

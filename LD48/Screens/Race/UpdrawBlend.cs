@@ -14,6 +14,9 @@ namespace LD48
         public UpdrawBlend(bool blackFadeIn)
         {
             this.blackFadeIn = blackFadeIn;
+
+            if (blackFadeIn)
+                Sounds.transition.Play();
         }
 
         public override bool Update(GameTime gameTime)

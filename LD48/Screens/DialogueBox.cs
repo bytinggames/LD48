@@ -188,10 +188,14 @@ namespace LD48
                 {
                     if (currentLine < lines.Count)
                     {
+                        Sounds.FastForwardTextbox.Play();
                         currentLine = lines.Count;
                     }
                     else
+                    {
+                        Sounds.ClickTextBox.Play();
                         return false;
+                    }
                 }
             }
 

@@ -58,6 +58,8 @@ namespace LD48
             kickMask.RotateRadians(orientation);
         }
 
+        bool colLastFrame;
+
         public override void Update(GameTime gameTime)
         {
             if (!enabled)
@@ -126,7 +128,17 @@ namespace LD48
             {
                 if (move.Length() > moveSpeed)
                     move = Vector2.Normalize(move) * moveSpeed;
-                Move(move);
+
+                if (Move(move))
+                {
+                    if (!colLastFrame)
+                    {
+                        Sounds.CollisionPlayerWall.Play();
+                        colLastFrame = true;
+                    }
+                }
+                else
+                    colLastFrame = false;
             }
 
             #region Kick
@@ -137,6 +149,7 @@ namespace LD48
             {
                 if (Input.mbLeft.pressed)
                 {
+                    bool hitAny = false;
                     foreach (var e in Race.instance.Entities)
                     {
                         switch (e)
@@ -146,10 +159,16 @@ namespace LD48
                                 {
                                     car.ApplyForce(Pos, orientationDir, 10f);
                                     kickedByMyself = true;
+                                    hitAny = true;
                                 }
                                 break;
                         }
                     }
+
+                    if (hitAny)
+                        Sounds.kickCar.Play();
+                    else
+                        Sounds.kickAir.Play();
                 }
             }
 

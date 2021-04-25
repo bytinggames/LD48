@@ -29,11 +29,13 @@ namespace LD48
             yield return new UpdrawBlend(false);
             yield return new UpdrawDelay(60);
             yield return new Dialogue1();
+            Sounds.lowerCar.Play();
             yield return new UpdrawLerp(100, f =>
             {
                 height = h - f * 1f / 2f;
             }, null);
             yield return new Dialogue2();
+            Sounds.lowerCar.Play();
             yield return new UpdrawLerp(100, f =>
             {
                 height = h - 1f / 2f - f * 1f / 2f;

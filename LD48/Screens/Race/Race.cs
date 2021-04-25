@@ -1,6 +1,7 @@
 ﻿using JuliHelper;
 using JuliHelper.Camera;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -559,6 +560,11 @@ namespace LD48
 
         public override void Dispose()
         {
+            for (int i = 0; i < Entities.Count; i++)
+            {
+                Entities[i].Dispose();
+            }
+
             instance = null;
         }
 
@@ -569,12 +575,20 @@ namespace LD48
 
         internal void Win()
         {
-            won = true;
+            if (!won.HasValue)
+            {
+                won = true;
+                Sounds.win.Play();
+            }
         }
 
         internal void Loose()
         {
-            won = false;
+            if (!won.HasValue)
+            {
+                won = false;
+                Sounds.loose.Play();
+            }
         }
 
 
@@ -582,19 +596,46 @@ namespace LD48
         {
             if (Ingame.instance.editorLevel <= 0)
             {
-                //yield return new UpdrawBlend(false);
-                yield return new UpdrawTrafficLights(() => pauseGame = false, level);
+                yield return new UpdrawBlend(false);
+
+
+                Sounds.engineStart.Play();
+                var engineSound = Sounds.engineLoop.SoundEffect.CreateInstance();
+                engineSound.IsLooped = true;
+                engineSound.Volume = 0f;
+                engineSound.Play();
+
+                yield return new UpdrawDelay(30);
+                yield return new UpdrawLerp(30, f => engineSound.Volume = f);
+
+
+                yield return new UpdrawTrafficLights(() =>
+                {
+                    pauseGame = false;
+                    if (level < 3)
+                        Sounds.carDriveAway.Play();
+                }, level);
 
                 if (Ingame.instance.getOutCutscene && Ingame.instance.level == 1)
                 {
-                    foreach (var item in GetOutCutscene()) yield return item;
+                    foreach (var item in GetOutCutscene(engineSound)) yield return item;
                 }
 
                 // Game
                 player.blockInput = false;
                 player.enabled = true;
                 friend.enabled = true;
+
+                if (!engineSound.IsDisposed)
+                {
+                    yield return new UpdrawLerp(30, f => engineSound.Volume = 1f - f);
+                    engineSound.Stop();
+                    engineSound.Dispose();
+                }
+
+
                 yield return new UpdrawWhile(() => !won.HasValue);
+                yield return new UpdrawDelay(90);
                 yield return new UpdrawBlend(true);
             }
             else
@@ -605,10 +646,15 @@ namespace LD48
             }
         }
 
-        IEnumerable<Updraw> GetOutCutscene()
+        IEnumerable<Updraw> GetOutCutscene(SoundEffectInstance engineSound)
         {
             // Cars dont work
-            yield return new UpdrawDelay(60 * 3);
+            yield return new UpdrawDelay(60 * 2);
+            yield return new UpdrawLerp(60, f => engineSound.Volume = 1f - f);
+
+            engineSound.Stop();
+            engineSound.Dispose();
+
             yield return new RaceDialogueLevel1();
             // Talk
             // Get out

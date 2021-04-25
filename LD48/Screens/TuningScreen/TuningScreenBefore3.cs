@@ -31,14 +31,17 @@ namespace LD48
 
             // rip off from car
             yield return new UpdrawDelay(30);
+            Sounds.ripCar.Play();
             angles[1] = 0.05f;
             yield return new UpdrawDelay(30);
+            Sounds.moveRippedCarPart.Play();
             yield return new UpdrawLerp(60, f =>
             {
                 offsets[1].X = -(Textures.carBody.Width + 10) * f;
             });
             yield return new UpdrawDelay(30);
 
+            Sounds.lowerCar.Play();
             yield return new UpdrawLerp(100, f =>
             {
                 height = h - f;

@@ -33,6 +33,9 @@ namespace LD48
 
             //dialog = new FriendDialogue();
             //dialogEnumerator = dialog.
+
+
+            InitLowered();
         }
 
         public override void Update(GameTime gameTime)

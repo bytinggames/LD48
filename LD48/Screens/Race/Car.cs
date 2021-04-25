@@ -1,5 +1,6 @@
 ﻿using JuliHelper;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,13 @@ namespace LD48
 
         M_Polygon poly;
 
-        public override object[] GetConstructorValues() => new object[]{ Pos, orientation };
+        protected bool lowered = false;
 
-        public Car(Vector2 pos, float orientation) : base(Textures.car, new M_Rectangle(0,0, Textures.car.Width, Textures.car.Height).ToPolygon())
+        SoundEffectInstance slideSound;
+
+        public override object[] GetConstructorValues() => new object[] { Pos, orientation };
+
+        public Car(Vector2 pos, float orientation) : base(Textures.car, new M_Rectangle(0, 0, Textures.car.Width, Textures.car.Height).ToPolygon())
         {
             Pos = pos;
             this.orientation = orientation;
@@ -34,6 +39,15 @@ namespace LD48
             baseVertices = poly.vertices.ToList();
 
             UpdateMask();
+        }
+
+        protected void InitLowered()
+        {
+            lowered = true;
+            slideSound = Sounds.carSlideOverGroundLoop.SoundEffect.CreateInstance();
+            slideSound.Volume = 0f;
+            slideSound.IsLooped = true;
+            slideSound.Play();
         }
 
         private void UpdateMask()
@@ -49,6 +63,8 @@ namespace LD48
             }
             poly.pos = Pos;
         }
+
+        bool colLastFrame;
 
         public override void Update(GameTime gameTime)
         {
@@ -76,7 +92,17 @@ namespace LD48
 
 
             Vector2 posPast = Pos;
-            Move(velocity + pushBack);
+            if (Move(velocity + pushBack))
+            {
+                if (!colLastFrame)
+                {
+                    Sounds.CollisionCarWall.Play();
+                    colLastFrame = true;
+                }
+            }
+            else
+                colLastFrame = false;
+
             velocity = Pos - posPast - pushBack;
 
             Vector2 lonDir = GetLonDir();
@@ -98,7 +124,7 @@ namespace LD48
             //if (velocity == Vector2.Zero)
             //    orientationVelocity = 0f;
             //else
-                orientationVelocity *= 0.9f;
+            orientationVelocity *= 0.9f;
 
             orientation += orientationVelocity;
             UpdateMask();
@@ -113,6 +139,15 @@ namespace LD48
                 orientationVelocity = -orientationVelocity * 0.5f;
             }
 
+
+            #region Slide Sound
+
+            if (lowered)
+            {
+                slideSound.Volume = Math.Clamp(velocity.Length() * 0.4f, 0f, 1f);
+            }
+
+            #endregion
         }
 
         public Vector2 GetLonDir() => new Vector2((float)Math.Cos(orientation), (float)Math.Sin(orientation));
@@ -140,6 +175,15 @@ namespace LD48
 
                 float forceToOrientation = Vector2.Dot(impactToOriginNOrth, forceDir);
                 orientationVelocity += forceToOrientation * force * 0.01f;
+            }
+        }
+
+        public override void Dispose()
+        {
+            if (slideSound != null)
+            {
+                slideSound.Stop();
+                slideSound.Dispose();
             }
         }
     }

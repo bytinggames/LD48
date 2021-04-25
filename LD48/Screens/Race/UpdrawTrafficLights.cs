@@ -59,15 +59,27 @@ namespace LD48
 
         IEnumerable<Updraw> GetStates()
         {
-            yield return new UpdrawLerp(30, f => fade = f, null);
+            yield return new UpdrawLerp(30, f => {
+                fade = f;
+                }, null);
+            Sounds.horn123.Play();
             colors[0] = Color.Red;
-            yield return new UpdrawDelay(60);
+
+            yield return new UpdrawDelay(30);
+
+            yield return new UpdrawDelay(30);
+            Sounds.horn123.Play();
             colors[1] = Color.Red;
             yield return new UpdrawDelay(60);
+            Sounds.horn123.Play();
+            colors[2] = Color.Red;
+            yield return new UpdrawDelay(60);
+            Sounds.hornGo.Play();
             for (int i = 0; i < colors.Length; i++)
                 colors[i] = Color.Lime;
             onFadeOut();
             yield return new UpdrawLerp(30, f => fade = 1f - f, null);
+
         }
     }
 }
