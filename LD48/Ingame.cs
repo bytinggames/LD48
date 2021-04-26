@@ -109,6 +109,7 @@ namespace LD48
             yield return new TuningScreenBefore3();
             foreach (var item in Level(level = 3)) yield return item;
             yield return new TuningScreenEnd();
+            yield return new ScreenEnd();
         }
 
         IEnumerable<Updraw> Level(int level)

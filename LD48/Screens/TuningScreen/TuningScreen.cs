@@ -22,8 +22,8 @@ namespace LD48
         UpdrawEnumerator stateMachine;
 
         Vector2 playerPos, friendPos;
-        public Vector2 playerSpeechPos => playerPos - new Vector2(0, Textures.playerBig.Height);
-        public Vector2 friendSpeechPos => friendPos - new Vector2(0, Textures.friendBig.Height);
+        public Vector2 playerSpeechPos => playerPos + new Vector2(0, -Textures.playerBig.Height);
+        public Vector2 friendSpeechPos => friendPos + new Vector2(44 - Textures.friendBig.Width / 2f, -Textures.friendBig.Height);
         public float[] angles = new float[3];
         public Vector2[] offsets = new Vector2[3];
 
@@ -42,7 +42,7 @@ namespace LD48
 
             stateMachine = new UpdrawEnumerator(StateMachine());
 
-            playerPos = screenView.BottomLeft + new Vector2(200, 0);
+            playerPos = screenView.BottomLeft + new Vector2(225, 0);
             friendPos = screenView.BottomLeft + new Vector2(350, 0);
             friendPos.X -= index * 25f;
 

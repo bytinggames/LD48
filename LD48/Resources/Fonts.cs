@@ -9,7 +9,7 @@ namespace LD48
 {
     public static class Fonts
     {
-        public static SpriteFont small, big, bigSpace, reallyBig;
+        public static SpriteFont small, bigSpace, reallyBig;
 
         public static void LoadContent(ContentManager content)
         {

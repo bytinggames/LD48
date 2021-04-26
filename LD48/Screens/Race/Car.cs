@@ -29,10 +29,13 @@ namespace LD48
 
         public bool engineOn;
 
+        protected Texture2D noColorTex;
+
         public override object[] GetConstructorValues() => new object[] { Pos, orientation };
 
         public Car(Vector2 pos, float orientation) : base(Textures.car1Color, new M_Rectangle(0, 0, Textures.car1Color.Width, Textures.car1Color.Height - 4).ToPolygon())
         {
+            noColorTex = Textures.car1NoColor;
             Pos = pos;
             this.orientation = orientation;
             poly = Mask as M_Polygon;
@@ -176,8 +179,8 @@ namespace LD48
             if (engineOn)
                 drawPos += G.Rand.NextVector2Box() * 0.25f;
 
-            Textures.car1NoColor.Draw(Anchor.Center(drawPos), null, null, null, orientation);
             Texture.Draw(Anchor.Center(drawPos), carColor, null, null, orientation);
+            noColorTex.Draw(Anchor.Center(drawPos), null, null, null, orientation);
         }
 
         internal void ApplyForce(Vector2 fromPosition, Vector2 inDirection, float force)

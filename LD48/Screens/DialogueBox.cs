@@ -23,7 +23,7 @@ namespace LD48
         M_Rectangle boxInner;
         M_Rectangle boxInnerToDraw;
 
-        SpriteFont font = Fonts.big;
+        SpriteFont font = Fonts.bigSpace;
         Vector2 boxBorder = new Vector2(8f);
 
         public Color textColor;

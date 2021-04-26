@@ -557,7 +557,7 @@ namespace LD48
             G.SpriteBatch.Begin(samplerState:SamplerState.PointClamp, transformMatrix: screenMatrix);
 
 #if DEBUG
-            Fonts.big.Draw("Editor Tool: " + editorTool + "\ncarIndex: " + carIndex, Vector2.One * 16f, Color.Black);
+            Fonts.bigSpace.Draw("Editor Tool: " + editorTool + "\ncarIndex: " + carIndex, Vector2.One * 16f, Color.Black);
 #endif
 
             gameState.Current?.DrawScreen();

@@ -36,6 +36,9 @@ namespace LD48
 
             carColor = Colors.friend;
 
+            Texture = Textures.car2Color;
+            noColorTex = Textures.car2NoColor;
+
             InitLowered();
         }
 
