@@ -81,7 +81,7 @@ namespace LD48
                 yield return "the bottom of my car is demolished";
                 yield return "I don't have money to fix it";
                 yield return "my children are worried";
-                yield return "and I have to look out for aunt perry's dog";
+                yield return "and I have to look out for aunt perrys dog";
                 Swap();
                 yield return "shhh...";
                 yield return "just go deeper";

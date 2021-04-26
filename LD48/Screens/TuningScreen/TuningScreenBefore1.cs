@@ -65,7 +65,7 @@ namespace LD48
                 yield return "you mean you lowered it?";
                 Swap();
                 yield return "yeaaah";
-                yield return "heard lowering the center of mass improves the car's grip on the ground";
+                yield return "heard lowering the center of mass improves the cars grip on the ground";
                 yield return "you know...";
                 yield return "physics!";
                 Swap();
