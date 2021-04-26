@@ -47,7 +47,7 @@ namespace LD48
                 yield return "since when are you the tougher one?";
                 yield return "I've been to gym for the last six years";
                 Swap();
-                yield return "car might be lighter";
+                yield return "the car might be lighter";
                 Swap();
                 yield return "bullshit!";
                 yield return "you cheated";

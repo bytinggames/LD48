@@ -16,7 +16,7 @@ namespace LD48
             float zoom = G.ResY / 1080f * 4f;
             G.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: Matrix.CreateScale(zoom));
 
-            Fonts.bigSpace.Draw("Thank you for playing my game :D\n\nThis was created in 48 hours for\nthe Ludum Dare Game Jam 48.\nTheme: Deeper and Deeper\n\n[ESC] to exit", Anchor.Center(G.Res / 2f / zoom), Color.Yellow);
+            Fonts.bigSpace.Draw("Thank you for playing my game :D\n\nThis was created in 48 hours for\nthe Ludum Dare Game Jam 48.\n\nTheme: Deeper and Deeper\n\n[ESC] to exit", Anchor.Center(G.Res / 2f / zoom), Color.Yellow);
 
             G.SpriteBatch.End();
         }
