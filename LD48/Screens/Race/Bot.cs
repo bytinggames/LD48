@@ -56,9 +56,9 @@ namespace LD48
 
         public override void Draw(GameTime gameTime)
         {
-            path.Draw();
+            //path.Draw();
 
-            new M_Point(targetPos).Draw(G.SpriteBatch, Color.Blue, Drawer.depth);
+            //new M_Point(targetPos).Draw(G.SpriteBatch, Color.Blue, Drawer.depth);
 
             base.Draw(gameTime);
         }
