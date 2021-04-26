@@ -114,7 +114,10 @@ namespace LD48
 
             }
             else
+            {
                 walkFrame = 0;
+                drawOrientation = orientation;
+            }
 
             #region Push out of half-solids
 
@@ -210,7 +213,6 @@ namespace LD48
             if (Input.mbLeft.down && !blockInput)
             {
                 frame = 5;
-                drawOrientation = orientation;
             }
             else if (pushing)
                 frame = 4;
@@ -220,6 +222,13 @@ namespace LD48
             Depth.humans.Set(() =>
             {
                 Texture.Draw(Anchor.Center(Pos), null, new Rectangle(frame * Texture.Height, 0, Texture.Height, Texture.Height), null, drawOrientation);
+            });
+            Depth.aimLine.Set(() =>
+            {
+                Vector2 dir = Vector2.Normalize(Race.instance.camera.mousePos - Pos);
+                Vector2 draw = Pos + dir * 12f;
+                float a = (Input.mbLeft.down ? 1f : 0.5f);
+                DrawM.Sprite.DrawLine(G.SpriteBatch, draw, draw + dir * 16f, Color.White * a, 1f, Drawer.depth);
             });
         }
 

@@ -17,6 +17,7 @@ namespace LD48
         [Order] public static DepthLayer humans;
         [Order] public static DepthLayer maskDebug;
         [Order] public static DepthLayer house;
+        [Order] public static DepthLayer aimLine;
         [Order] public static DepthLayer editorTools;
         [Order] public static DepthLayer ui;
         [Order] public static DepthLayer blackFade;

@@ -18,8 +18,8 @@ namespace LD48
             switch (Ingame.instance.level)
             {
                 case 1: return 0.02f;
-                case 2: return 0.1f;
-                default: return 0.13f;
+                case 2: return 0.05f;
+                default: return 0.08f;
             }
         }
 
