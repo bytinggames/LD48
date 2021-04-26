@@ -80,11 +80,11 @@ namespace LD48
             if (IsActive)
             {
 #if DEBUG
-                //if (Input.esc.pressed)
-                //{
-                //    Exit();
-                //    return;
-                //}
+                if (Input.esc.pressed)
+                {
+                    Exit();
+                    return;
+                }
                 if (Input.leftControl.down && Input.r.pressed)
                 {
                     ingame.Dispose();

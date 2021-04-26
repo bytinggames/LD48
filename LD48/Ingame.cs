@@ -19,7 +19,7 @@ namespace LD48
 
         public int level = 0;
 #if DEBUG
-        public bool getOutCutscene = true;
+        public bool getOutCutscene = false;
 #else
         public bool getOutCutscene = true;
 #endif
