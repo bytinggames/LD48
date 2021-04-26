@@ -111,7 +111,8 @@ namespace LD48
 
         bool colLastFrame;
 
-        private bool IsBotWithoutCollisions() => this is Bot bot && bot.botID != 0;
+        private bool IsBotWithoutCollisions() => this is Bot bot && bot.botID != 0
+            && bot.pathIndex < bot.path.nodes.Count - 1;
 
         public override void Update(GameTime gameTime)
         {
@@ -119,8 +120,8 @@ namespace LD48
 
             Vector2 pushBack = Vector2.Zero;
 
-            if (!IsBotWithoutCollisions())
-            {
+            //if (!IsBotWithoutCollisions())
+            //{
                 foreach (var e in Race.instance.Entities)
                 {
                     if (e == this)
@@ -128,7 +129,7 @@ namespace LD48
                     switch (e)
                     {
                         case Car car:
-                            if (car.IsBotWithoutCollisions())
+                            if (car.IsBotWithoutCollisions() != IsBotWithoutCollisions())
                                 break;
 
                             CollisionResult cr = Mask.DistToMask(car.Mask);
@@ -139,7 +140,7 @@ namespace LD48
                             break;
                     }
                 }
-            }
+            //}
             #endregion
 
 

@@ -13,7 +13,7 @@ namespace LD48
         public int botID;
 
         Vector2 targetPos;
-        int pathIndex;
+        public int pathIndex;
 
         protected virtual float GetSpeed() => 0.5f;
 
