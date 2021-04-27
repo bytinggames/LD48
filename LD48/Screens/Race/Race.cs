@@ -464,6 +464,7 @@ namespace LD48
             camera.matrix *= Matrix.CreateTranslation(screenshake);
 
             G.SpriteBatch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, null, null, null, camera.matrix);
+            DepthManager.BeginDraw(typeof(Depth));
             DrawM.basicEffect.World = camera.matrix;
             //G.GDevice.DepthStencilState = state;
 
@@ -705,7 +706,7 @@ namespace LD48
             yield return new UpdrawDelay(10);
 
             PlayerCar myCar = Race.instance.Entities.Find(f => f is PlayerCar) as PlayerCar;
-            yield return new UpdrawDo(300, () =>
+            yield return new UpdrawDo(60 * 3, () =>
             {
                 player.moveInput = (myCar.Pos - player.Pos);
                 //moveInput = new Vector2(0f, -1f);

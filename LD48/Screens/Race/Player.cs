@@ -95,10 +95,22 @@ namespace LD48
 
             Vector2 move = Vector2.Zero;
 
+            // update sprite orientation
+            if (blockInput)
+            {
+                if (moveInput != Vector2.Zero)
+                    drawOrientation = (float)Math.Atan2(moveInput.Y, moveInput.X);
+            }
+            else
+            {
+                if (moveInput == Vector2.Zero || Input.mbLeft.down)
+                    drawOrientation = orientation;
+                else
+                    drawOrientation = (float)Math.Atan2(moveInput.Y, moveInput.X);
+            }
+
             if (moveInput != Vector2.Zero)
             {
-                drawOrientation = (float)Math.Atan2(moveInput.Y, moveInput.X);
-
                 moveInput.Normalize();
                 move = moveInput;
                 lastMoveInput = moveInput;
@@ -116,7 +128,6 @@ namespace LD48
             else
             {
                 walkFrame = 0;
-                drawOrientation = orientation;
             }
 
             #region Push out of half-solids
@@ -223,13 +234,16 @@ namespace LD48
             {
                 Texture.Draw(Anchor.Center(Pos), null, new Rectangle(frame * Texture.Height, 0, Texture.Height, Texture.Height), null, drawOrientation);
             });
-            Depth.aimLine.Set(() =>
+            if (!blockInput)
             {
-                Vector2 dir = Vector2.Normalize(Race.instance.camera.mousePos - Pos);
-                Vector2 draw = Pos + dir * 12f;
-                float a = (Input.mbLeft.down ? 1f : 0.5f);
-                DrawM.Sprite.DrawLine(G.SpriteBatch, draw, draw + dir * 16f, Color.White * a, 1f, Drawer.depth);
-            });
+                Depth.aimLine.Set(() =>
+                {
+                    Vector2 dir = Vector2.Normalize(Race.instance.camera.mousePos - Pos);
+                    Vector2 draw = Pos + dir * 12f;
+                    float a = (Input.mbLeft.down ? 1f : 0.5f);
+                    DrawM.Sprite.DrawLine(G.SpriteBatch, draw, draw + dir * 16f, Color.White * a, 1f, Drawer.depth);
+                });
+            }
         }
 
         public override void DrawOverlay(GameTime gameTime)

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -9,6 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <AssemblyName>Street Spark Racing</AssemblyName>
+    <Version>1.0.1.0</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
@@ -33,6 +34,11 @@
     <Reference Include="NVorbis.NAudioSupport">
       <HintPath>..\lib\NVorbis.NAudioSupport.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Content\Levels\*.bin;Content\Textures\*.png;Content\Sounds\**\*.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="..\..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems" Label="Shared" />
 </Project>
