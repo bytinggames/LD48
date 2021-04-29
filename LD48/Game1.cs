@@ -32,10 +32,9 @@ namespace LD48
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
-            {
-                graphics.IsFullScreen = true;
-            }
+#if !WINDOWS
+            graphics.IsFullScreen = true;
+#endif
             graphics.ApplyChanges();
 
             Input.Initialize();

@@ -1,2 +1,2 @@
-dotnet publish -c Release -r linux-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false --self-contained true -p:PublishSingleFile=false
+dotnet publish -c Release -r linux-x64 /p:PublishReadyToRun=false /p:TieredCompilation=false --self-contained true -p:PublishSingleFile=false /p:DefineConstants=LINUX
 pause
