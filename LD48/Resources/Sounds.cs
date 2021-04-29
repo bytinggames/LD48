@@ -22,9 +22,13 @@ namespace LD48
         public static SoundItem ClickTextBox => None;
         public static SoundItem FastForwardTextbox => None;
 
-        public static void LoadContent(string contentPath)
+        public static void LoadContent(ContentManager content, string contentPath, string[] files)
         {
+#if DEBUG
             ContentFenja.LoadRaw(typeof(Sounds), contentPath, "Sounds", null);
+#else
+            ContentFenja.LoadProcessed(typeof(Sounds), "Sounds", content, files);
+#endif
 
             textPlop.Volume /= 4f;
             engineLoop.Volume *= 0.5f;

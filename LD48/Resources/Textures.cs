@@ -14,9 +14,13 @@ namespace LD48
         public static Texture2D player, car1Color, car1NoColor, floor, friend, goal, trafficLight, controlsMouse, controlsKeys, wheel, carBodyColor, carBodyNoColor, playerBig, friendBig, tuningBG,
             car2NoColor, car2Color;
 
-        public static void LoadContent(GraphicsDevice gDevice, string contentPath)
+        public static void LoadContent(GraphicsDevice gDevice, ContentManager content, string contentPath)
         {
+#if DEBUG
             ContentFenja.LoadRaw(typeof(Textures), contentPath, "Textures", gDevice);
+#else
+            ContentFenja.LoadProcessed(typeof(Textures), "Textures", content);
+#endif
 
             GeneratedTextures.LoadContent();
         }

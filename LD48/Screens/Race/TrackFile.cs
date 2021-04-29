@@ -21,19 +21,15 @@ namespace LD48
             Race race;
 
             loadedIndex = index;
-            string path = GetFilePath(index);
-            if (File.Exists(path))
+
+
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var resourceName = $"LD48.Content.Levels.level_{index}.bin";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (BinaryReader br = new BinaryReader(stream))
             {
-                using (FileStream ms = File.Open(path, FileMode.Open))
-                {
-                    using (BinaryReader br = new BinaryReader(ms))
-                    {
-                        race = br.Read<Race>();
-                    }
-                }
+                race = br.Read<Race>();
             }
-            else
-                race = new Race(new List<Entity>() { new Player(new Vector2(100) / 2f * Tile.size) }, new bool[100, 100]);
 
             return race;
         }

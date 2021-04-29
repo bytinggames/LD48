@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace LD48
@@ -31,9 +32,24 @@ namespace LD48
             string contentPath = Path.Combine(Environment.CurrentDirectory, @"Content");
 #endif
 
-            Textures.LoadContent(gDevice, contentPath);
+#if DEBUG
+            string[] files = null;
+#else
+            string filesFile;
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "LD48.Content.ContentListGenerated_do-not-edit.txt";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                filesFile = reader.ReadToEnd();
+            }
+
+            string[] files = filesFile.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+#endif
+
+            Textures.LoadContent(gDevice, content, contentPath);
             Fonts.LoadContent(content);
-            Sounds.LoadContent(contentPath);
+            Sounds.LoadContent(content, contentPath, files);
             Music.LoadContent(content);
             DepthManager.Initialize(typeof(Depth));
             Paths.Initialize(contentPath);
