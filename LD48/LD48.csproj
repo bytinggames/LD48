@@ -22,7 +22,8 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-	  <MonoGameContentReference Include="Content\Content.mgcb" />
+    <EmbeddedResource Include="Content\ContentListGenerated_do-not-edit.txt" Condition=" '$(Configuration)' == 'Release' " />
+    <EmbeddedResource Include="Content\Levels\*.bin" />
   </ItemGroup>
   <ItemGroup>
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
@@ -42,10 +43,11 @@
       <HintPath>..\lib\NVorbis.NAudioSupport.dll</HintPath>
     </Reference>
   </ItemGroup>
-	<ItemGroup>
-		<None Update="Content\Levels\*.bin;Content\Textures\*.png;Content\Sounds\**\*.wav">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-	<Import Project="..\..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems" Label="Shared" />
+  <Import Project="..\..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems" Label="Shared" />
+  <Target Name="PrepareForBuildCustom" BeforeTargets="PrepareForBuild" Condition=" '$(Configuration)' == 'Release' ">
+    <Exec Command="Powershell.exe -executionpolicy remotesigned -File PrepareForBuild.ps1 &quot;$(DevEnvDir)&quot;" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
+    <Exec Command="Powershell.exe -executionpolicy remotesigned -File PostBuild.ps1 &quot;$(DevEnvDir)&quot;" />
+  </Target>
 </Project>
