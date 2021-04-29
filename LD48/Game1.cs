@@ -31,6 +31,11 @@ namespace LD48
             Window.Position = new Point(0, 0);
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
+            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                graphics.IsFullScreen = true;
+            }
             graphics.ApplyChanges();
 
             Input.Initialize();
@@ -90,7 +95,6 @@ namespace LD48
                     ingame.Dispose();
                     NewIngame();
                 }
-
                 windowHelper.UpdateBasicInputFunctions();
 #endif
 
