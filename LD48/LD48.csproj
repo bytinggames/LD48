@@ -22,7 +22,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Content\ContentListGenerated_do-not-edit.txt" Condition=" '$(Configuration)' == 'Release' " />
     <EmbeddedResource Include="Content\Levels\*.bin" />
   </ItemGroup>
   <ItemGroup>
@@ -44,10 +43,11 @@
     </Reference>
   </ItemGroup>
   <Import Project="..\..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems" Label="Shared" />
-  <Target Name="PrepareForBuildCustom" BeforeTargets="PrepareForBuild" Condition=" '$(Configuration)' == 'Release' ">
+  <!-- added next two tags for automatic content generation -->
+	<Target Name="PrepareForBuildCustom" BeforeTargets="PrepareForBuild" Condition=" '$(Configuration)' == 'Release' ">
     <Exec Command="Powershell.exe -executionpolicy remotesigned -File PrepareForBuild.ps1 &quot;$(DevEnvDir)&quot;" />
   </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Release' ">
-    <Exec Command="Powershell.exe -executionpolicy remotesigned -File PostBuild.ps1 &quot;$(DevEnvDir)&quot;" />
-  </Target>
+  <ItemGroup>
+	<EmbeddedResource Include="Content\ContentListGenerated_do-not-edit.txt" Condition=" '$(Configuration)' == 'Release' " />
+  </ItemGroup>
 </Project>
