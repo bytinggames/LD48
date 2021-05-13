@@ -44,7 +44,7 @@
   </ItemGroup>
   <Import Project="..\..\..\JuliHelper\JuliHelperShared\JuliHelperShared\JuliHelperShared.projitems" Label="Shared" />
   <!-- added next two tags for automatic content generation -->
-	<Target Name="PrepareForBuildCustom" BeforeTargets="PrepareForBuild" Condition=" '$(Configuration)' == 'Release' ">
+  <Target Name="PrepareForBuildCustom" BeforeTargets="PrepareForBuild" Condition=" '$(Configuration)' == 'Release' ">
     <Exec Command="Powershell.exe -executionpolicy remotesigned -File PrepareForBuild.ps1 &quot;$(DevEnvDir)&quot;" />
   </Target>
   <ItemGroup>
