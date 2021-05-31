@@ -25,6 +25,12 @@
     <EmbeddedResource Include="Content\Levels\*.bin" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Content\Fonts\big.xnb" />
+    <None Remove="Content\Fonts\bigSpace.xnb" />
+    <None Remove="Content\Fonts\reallyBig.xnb" />
+    <None Remove="Content\Fonts\small.xnb" />
+  </ItemGroup>
+  <ItemGroup>
     <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />
   </ItemGroup>
   <ItemGroup>
@@ -49,5 +55,11 @@
   </Target>
   <ItemGroup>
 	<EmbeddedResource Include="Content\ContentListGenerated_do-not-edit.txt" Condition=" '$(Configuration)' == 'Release' " />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Content\Fonts\big.xnb" />
+    <EmbeddedResource Include="Content\Fonts\bigSpace.xnb" />
+    <EmbeddedResource Include="Content\Fonts\reallyBig.xnb" />
+    <EmbeddedResource Include="Content\Fonts\small.xnb" />
   </ItemGroup>
 </Project>
