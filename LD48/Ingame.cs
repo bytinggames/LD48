@@ -46,6 +46,9 @@ namespace LD48
         }
         public bool Update(GameTime gameTime)
         {
+            if (Input.esc.TimeDown >= 60)
+                return false;
+
             if (screen.Current is Race race)
             {
 #if DEBUG
@@ -73,6 +76,16 @@ namespace LD48
         public void Draw(GameTime gameTime)
         {
             screen.Current.Draw(gameTime);
+
+            if (Input.esc.down)
+            {
+                spriteBatch.Begin(samplerState:SamplerState.PointClamp);
+
+                new M_Rectangle(0, 0, G.ResX, G.ResY).Draw(Color.Black * 0.75f);
+                Fonts.reallyBig.Draw("Hold Esc to exit...", Anchor.Center(G.Res / 2f), Color.White, new Vector2(2f));
+
+                spriteBatch.End();
+            }
         }
 
         public void Dispose()
