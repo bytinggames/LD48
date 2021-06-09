@@ -53,7 +53,7 @@ namespace LD48
             {
                 bool collision = false;
                 Vector2 originalMove = move;
-                CollisionResult crTotal = default;
+                CollisionResult crTotal = new CollisionResult();
 
                 for (int i = 0; i < Race.instance.solids.Count; i++)
                 {
