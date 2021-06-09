@@ -27,7 +27,7 @@ namespace LD48
             ContentFenja.Initialize(exeInfo.LastWriteTime);
 
 #if DEBUG
-            string contentPath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\Content");
+            string contentPath = Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.Parent.FullName, "Content");
 #else
             string contentPath = Path.Combine(Environment.CurrentDirectory, @"Content");
 #endif
